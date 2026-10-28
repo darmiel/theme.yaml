@@ -1,0 +1,63 @@
+# yaml-language-server: $schema=../schema.json
+owners:
+  - MathieuLF
+name: Jellyfin Obsidian Pride
+author: MathieuLF
+author_url: https://github.com/MathieuLF
+repo: https://github.com/MathieuLF/jellyfin-obsidian-pride
+description: An OLED dark theme with navy-black surfaces, an orchid purple accent and Progress Pride rainbow gradients, with large focus rings for TV remotes.
+status: listed
+screenshots:
+  - https://raw.githubusercontent.com/MathieuLF/jellyfin-obsidian-pride/main/assets/preview.png
+variants:
+  - id: default
+    name: Obsidian Pride
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/MathieuLF/jellyfin-obsidian-pride@main/theme.css");
+groups:
+  - id: palette
+    label: Palette
+  - id: layout
+    label: Layout
+settings:
+  - id: accent
+    label: Accent
+    description: The main orchid purple accent.
+    type: color
+    group: palette
+    default: "#b77cff"
+    css: |-
+      :root {
+        --accent-main: {{ value }};
+        --jf-palette-primary-main: {{ value }};
+        --jf-palette-primary-mainChannel: {{ value | r }} {{ value | g }} {{ value | b }};
+      }
+  - id: focus-ring
+    label: Focus ring
+    description: Outline around focused items, mostly seen with a keyboard or TV remote.
+    type: color
+    group: palette
+    default: "#f5c2ff"
+    tags:
+      - not-in-preview
+    css: |-
+      :root {
+        --focus-ring: {{ value }};
+        --focus-glow: {{ value | alpha 0.42 }};
+        --jf-palette-action-focus: {{ value | alpha 0.24 }};
+      }
+  - id: radius
+    label: Card corner radius
+    type: number
+    group: layout
+    page: home
+    default: 14
+    min: 0
+    max: 30
+    step: 1
+    unit: px
+    css: |-
+      :root {
+        --rounded-cards: {{ value | px }};
+        --jf-card-borderRadius: {{ value | px }};
+      }

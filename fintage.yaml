@@ -1,0 +1,375 @@
+# yaml-language-server: $schema=../schema.json
+owners:
+  - ricolehn
+name: Fintage
+author: ricolehn
+author_url: https://github.com/ricolehn
+repo: https://github.com/ricolehn/fintage
+description: A dark theme in desert tones with a faint film grain, frosted glass panels and a champagne accent, plus a warm light mode in sand tones. Item pages show their artwork whole in a rounded card with a soft glow in its colors.
+status: listed
+note: Based on ElegantFin and made for Jellyfin 12.2. Switch between the dark and the light mode under User Settings > Display > Theme.
+screenshots:
+  - https://raw.githubusercontent.com/ricolehn/fintage/main/Previews/desktop/01-home.webp
+  - https://raw.githubusercontent.com/ricolehn/fintage/main/Previews/desktop/04-movie.webp
+  - https://raw.githubusercontent.com/ricolehn/fintage/main/Previews/desktop/09-series.webp
+  - https://raw.githubusercontent.com/ricolehn/fintage/main/Previews/desktop/12-episode.webp
+  - https://raw.githubusercontent.com/ricolehn/fintage/main/Previews/light/01-home.webp
+  - https://raw.githubusercontent.com/ricolehn/fintage/main/Previews/fintage-hero.webp
+variants:
+  - id: default
+    name: Fintage
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/ricolehn/fintage@{{ version }}/Theme/Fintage-latest-minified.css");
+groups:
+  - id: appbar
+    label: App bar
+  - id: cards
+    label: Cards
+    description: The hover effects are for desktops.
+  - id: details
+    label: Item pages
+    description: What shows on the pages of movies, shows and artists.
+  - id: mobile
+    label: Phones
+  - id: addons
+    label: Add-ons
+  - id: advanced
+    label: Advanced
+settings:
+  - id: appbar
+    label: Style
+    type: select
+    group: appbar
+    display: segmented
+    default: frosted
+    options:
+      - value: frosted
+        label: Frosted
+        description: Like milk glass, with a clean bottom edge.
+      - value: solid
+        label: Solid
+        description: Fully opaque.
+        css: |-
+          :root {
+            --appBarBlurStrength: none;
+            --appBarColor: var(--solidHeaderColor);
+          }
+      - value: seamless
+        label: Seamless
+        description: Fades out at the bottom.
+        css: |-
+          :root {
+            --appBarSeamlessBlur: initial;
+            --appBarBlurStrength: initial;
+            --appBarColor: initial;
+            --appBarBorder: initial;
+            --appBarShadow: initial;
+            --appBarTabsPadding: initial;
+          }
+      - value: transparent
+        label: Transparent
+        description: No background at all.
+        css: |-
+          :root {
+            --appBarSeamlessBlur: none;
+            --appBarBlurStrength: none;
+            --appBarColor: transparent;
+            --appBarBorder: none;
+            --appBarShadow: none;
+          }
+  - id: hide-syncplay
+    label: Hide the SyncPlay button
+    type: toggle
+    group: appbar
+    default: false
+    css: |-
+      .headerSyncButton,
+      .MuiIconButton-root:has([data-testid="GroupsIcon"]) {
+        display: none;
+      }
+  - id: hide-cast
+    label: Hide the Cast button
+    type: toggle
+    group: appbar
+    default: false
+    css: |-
+      .headerCastButton,
+      .MuiIconButton-root:has([data-testid="CastIcon"], [data-testid="CastConnectedIcon"]) {
+        display: none;
+      }
+  - id: card-buttons
+    label: Played and favorite buttons on hover
+    type: toggle
+    group: cards
+    default: false
+    page: home
+    css: |-
+      :root {
+        --extraCardButtonsVisibility: block;
+      }
+  - id: hide-card-menu
+    label: Hide the three-dot button next to them
+    type: toggle
+    group: cards
+    default: false
+    page: home
+    when:
+      setting: card-buttons
+      is: true
+    css: |-
+      :root {
+        --menuButtonVisibility: none;
+      }
+  - id: centre-play
+    label: Play button in the middle of cards
+    type: toggle
+    group: cards
+    default: false
+    page: home
+    css: |-
+      :root {
+        --overlayPlayButtonPosition: 50%;
+      }
+  - id: no-sheen
+    label: No sheen on hover
+    type: toggle
+    group: cards
+    default: false
+    page: home
+    css: |-
+      :root {
+        --cardHoverEffect: none;
+      }
+  - id: library-labels
+    label: Labels below the library cards
+    type: toggle
+    group: cards
+    default: false
+    page: home
+    css: |-
+      :root {
+        --libraryLabelVisibility: block;
+      }
+  - id: resume-scale
+    label: Continue Watching card size
+    type: number
+    group: cards
+    page: home
+    default: 1
+    min: 1
+    max: 1.5
+    step: 0.05
+    var: --resumeCardScale
+  - id: hide-original-title
+    label: Hide the original title
+    type: toggle
+    group: details
+    default: false
+    page: movie
+    css: |-
+      :root {
+        --itemOriginalTitleVisibility: none;
+      }
+  - id: hide-clear-logo
+    label: Hide the logo
+    type: toggle
+    group: details
+    default: false
+    page: movie
+    css: |-
+      :root {
+        --clearLogoVisibility: none;
+      }
+  - id: show-title
+    label: Always show the title
+    description: Also when there is a logo.
+    type: toggle
+    group: details
+    default: false
+    page: movie
+    css: |-
+      :root {
+        --itemTitleVisibility: block;
+      }
+  - id: imdb-stars
+    label: IMDb colors for the star rating
+    description: Gold instead of the TMDB colors.
+    type: toggle
+    group: details
+    default: false
+    page: movie
+    css: |-
+      .starIcon {
+        --colors: var(--imdb);
+      }
+  - id: hide-artist-logo
+    label: Hide artist logos
+    type: toggle
+    group: details
+    default: false
+    css: |-
+      :root {
+        --artistClearLogoVisibility: none;
+      }
+  - id: show-artist-title
+    label: Show artist names
+    type: toggle
+    group: details
+    default: false
+    css: |-
+      :root {
+        --artistTitleVisibility: block;
+      }
+  - id: full-artist-background
+    label: Undimmed artist backgrounds
+    description: On desktops the background is dimmed so the logo stands out.
+    type: toggle
+    group: details
+    default: false
+    css: |-
+      :root {
+        --artistPageBackground: none;
+      }
+  - id: hide-mini-buttons
+    label: Hide the small buttons on cards
+    description: The small play and three-dot buttons.
+    type: toggle
+    group: mobile
+    default: false
+    page: home
+    css: |-
+      :root {
+        --miniOverlayButtonVisibility: none;
+      }
+  - id: hide-ends-at
+    label: Hide when a video ends
+    type: toggle
+    group: mobile
+    default: false
+    page: movie
+    css: |-
+      :root {
+        --endsAtVisibility: none;
+      }
+  - id: show-critics
+    label: Show the critics rating
+    type: toggle
+    group: mobile
+    default: false
+    page: movie
+    css: |-
+      :root {
+        --criticsRatingVisibility: block;
+      }
+  - id: media-covers
+    label: Custom media covers
+    description: Colored covers for the libraries on the home screen.
+    type: toggle
+    group: addons
+    display: card
+    default: false
+    page: home
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/ricolehn/fintage@{{ version }}/Theme/assets/add-ons/custom-media-covers-latest-min.css");
+  - id: media-bar
+    label: Media Bar plugin
+    description: Styles the Media Bar plugin to match Fintage.
+    type: toggle
+    group: addons
+    display: card
+    default: false
+    tags:
+      - needs-plugin
+      - not-in-preview
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/ricolehn/fintage@{{ version }}/Theme/assets/add-ons/media-bar-plugin-support-latest-min.css");
+  - id: version
+    label: Version
+    description: main updates by itself. A release like v1.4.2 or a commit id stays on that state.
+    type: text
+    group: advanced
+    default: main
+    placeholder: main
+    pattern: main|v[0-9]+\.[0-9]+\.[0-9]+|[0-9a-f]{7,40}
+  - id: larger-radius
+    label: Larger corner radius
+    description: Other values can break the layout on some screens.
+    type: number
+    group: advanced
+    default: 1.25
+    min: 0
+    max: 2.5
+    step: 0.05
+    unit: em
+    var: --largerRadius
+  - id: large-radius
+    label: Large corner radius
+    type: number
+    group: advanced
+    default: 1
+    min: 0
+    max: 2
+    step: 0.05
+    unit: em
+    var: --largeRadius
+  - id: small-radius
+    label: Small corner radius
+    type: number
+    group: advanced
+    default: 0.5
+    min: 0
+    max: 1
+    step: 0.025
+    unit: em
+    var: --smallRadius
+  - id: smaller-radius
+    label: Smaller corner radius
+    type: number
+    group: advanced
+    default: 0.375
+    min: 0
+    max: 1
+    step: 0.025
+    unit: em
+    var: --smallerRadius
+  - id: border-width
+    label: Border width
+    type: number
+    group: advanced
+    default: 0.06
+    min: 0
+    max: 0.2
+    step: 0.01
+    unit: em
+    var: --borderWidth
+  - id: border-width-double
+    label: Double border width
+    type: number
+    group: advanced
+    default: 0.12
+    min: 0
+    max: 0.4
+    step: 0.01
+    unit: em
+    var: --borderWidthDouble
+  - id: old-icons
+    label: Older icons
+    description: For webOS TVs that can't show the modern Material icons.
+    type: toggle
+    group: advanced
+    default: false
+    css: |-
+      :root {
+        --iconPack: 'Material Icons';
+      }
+  - id: login-text
+    label: Sign-in title
+    description: The text above the sign-in form.
+    type: text
+    group: advanced
+    default: Sign in to continue
+    page: login
+    css: |-
+      :root {
+        --loginPageText: "{{ value }}";
+      }
