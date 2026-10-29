@@ -6,7 +6,8 @@ author: ricolehn
 author_url: https://github.com/ricolehn
 repo: https://github.com/ricolehn/fintage
 description: A dark theme in desert tones with a faint film grain, frosted glass panels and a champagne accent, plus a warm light mode in sand tones. Item pages show their artwork whole in a rounded card with a soft glow in its colors.
-status: listed
+versions:
+  - "12"
 note: Based on ElegantFin and made for Jellyfin 12.2. Switch between the dark and the light mode under User Settings > Display > Theme.
 screenshots:
   - https://raw.githubusercontent.com/ricolehn/fintage/main/Previews/desktop/01-home.webp

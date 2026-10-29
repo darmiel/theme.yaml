@@ -6,7 +6,8 @@ author: MathieuLF
 author_url: https://github.com/MathieuLF
 repo: https://github.com/MathieuLF/jellyfin-obsidian-pride
 description: An OLED dark theme with navy-black surfaces, an orchid purple accent and Progress Pride rainbow gradients, with large focus rings for TV remotes.
-status: listed
+versions:
+  - "12"
 screenshots:
   - https://raw.githubusercontent.com/MathieuLF/jellyfin-obsidian-pride/main/assets/preview.png
 variants:

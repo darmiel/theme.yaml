@@ -1,0 +1,1601 @@
+/*
+ * Jellyfin GitHub theme
+ * A Jellyfin web theme modelled on GitHub's Primer design system.
+ * https://github.com/darmiel/theme.yaml
+ *
+ * Works on Jellyfin 10.10, 10.11 and 12.x (legacy header and the new MUI app
+ * bar / dashboard). Everything below reads the --gh-* tokens; this file ships
+ * the Dark tokens as defaults. Other editions (Light, Dark dimmed, Dark high
+ * contrast) only override the tokens in a :root block after the @import.
+ *
+ * MIT License, (c) darmiel
+ */
+
+/* ------------------------------------------------------------------------ */
+/* 1. Tokens (GitHub Dark)                                                   */
+/* ------------------------------------------------------------------------ */
+
+:root {
+  /* surfaces */
+  --gh-canvas: #0d1117;
+  --gh-canvas-channel: 13 17 23;
+  --gh-canvas-subtle: #161b22;
+  --gh-canvas-inset: #010409;
+  --gh-overlay: #161b22;
+  /* borders */
+  --gh-border: #30363d;
+  --gh-border-muted: #21262d;
+  /* text */
+  --gh-fg: #e6edf3;
+  --gh-fg-channel: 230 237 243;
+  --gh-fg-muted: #8b949e;
+  --gh-fg-subtle: #6e7681;
+  --gh-fg-on-emphasis: #ffffff;
+  /* accent (links, focus, selection) */
+  --gh-accent: #2f81f7;
+  --gh-accent-channel: 47 129 247;
+  --gh-accent-fg: #58a6ff;
+  /* state colors */
+  --gh-success: #238636;
+  --gh-success-fg: #3fb950;
+  --gh-attention-fg: #d29922;
+  --gh-danger: #da3633;
+  --gh-danger-fg: #f85149;
+  --gh-done-fg: #a371f7;
+  /* neutral fills */
+  --gh-neutral-muted: rgb(110 118 129 / 0.4);
+  --gh-neutral-subtle: rgb(110 118 129 / 0.1);
+  --gh-hover: rgb(177 186 196 / 0.12);
+  /* buttons */
+  --gh-btn-bg: #21262d;
+  --gh-btn-hover-bg: #30363d;
+  --gh-btn-border: rgb(240 246 252 / 0.1);
+  --gh-btn-hover-border: #8b949e;
+  --gh-btn-primary-bg: #238636;
+  --gh-btn-primary-hover-bg: #2ea043;
+  --gh-btn-primary-fg: #ffffff;
+  /* header */
+  --gh-header-bg: #010409;
+  --gh-header-fg: #e6edf3;
+  --gh-header-border: #30363d;
+  --gh-underline: #f78166;
+  /* shape & depth */
+  --gh-radius: 6px;
+  --gh-radius-lg: 12px;
+  --gh-card-border-width: 1px;
+  --gh-shadow-overlay: 0 0 0 1px var(--gh-border), 0 16px 32px rgb(1 4 9 / 0.85);
+  --gh-shadow-small: 0 0 transparent;
+  /* type */
+  --gh-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  --gh-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+  --gh-font-heading: var(--gh-font);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 2. Bridge to Jellyfin's own palette (12.x and the 10.11 MUI dashboard)    */
+/*    Higher specificity than MUI's :root / [data-theme] blocks.            */
+/* ------------------------------------------------------------------------ */
+
+html:root,
+html[data-theme] {
+  color-scheme: dark;
+  --jf-shape-borderRadius: var(--gh-radius);
+  --jf-card-borderRadius: var(--gh-radius-lg);
+  --jf-palette-primary-main: var(--gh-accent);
+  --jf-palette-primary-light: var(--gh-accent-fg);
+  --jf-palette-primary-dark: var(--gh-accent);
+  --jf-palette-primary-contrastText: var(--gh-fg-on-emphasis);
+  --jf-palette-primary-mainChannel: var(--gh-accent-channel);
+  --jf-palette-primary-lightChannel: var(--gh-accent-channel);
+  --jf-palette-primary-darkChannel: var(--gh-accent-channel);
+  --jf-palette-secondary-main: var(--gh-accent);
+  --jf-palette-secondary-light: var(--gh-accent-fg);
+  --jf-palette-secondary-dark: var(--gh-accent);
+  --jf-palette-secondary-contrastText: var(--gh-fg-on-emphasis);
+  --jf-palette-secondary-mainChannel: var(--gh-accent-channel);
+  --jf-palette-background-default: var(--gh-canvas);
+  --jf-palette-background-paper: var(--gh-canvas-subtle);
+  --jf-palette-background-defaultChannel: var(--gh-canvas-channel);
+  --jf-palette-background-paperChannel: var(--gh-canvas-channel);
+  --jf-palette-text-primary: var(--gh-fg);
+  --jf-palette-text-secondary: var(--gh-fg-muted);
+  --jf-palette-text-disabled: var(--gh-fg-subtle);
+  --jf-palette-text-icon: var(--gh-fg-muted);
+  --jf-palette-text-primaryChannel: var(--gh-fg-channel);
+  --jf-palette-divider: var(--gh-border-muted);
+  --jf-palette-action-active: var(--gh-fg-muted);
+  --jf-palette-action-hover: var(--gh-hover);
+  --jf-palette-action-selected: var(--gh-neutral-muted);
+  --jf-palette-action-focus: var(--gh-hover);
+  --jf-palette-action-activeChannel: var(--gh-fg-channel);
+  --jf-palette-action-selectedChannel: var(--gh-fg-channel);
+  --jf-palette-action-disabled: var(--gh-fg-subtle);
+  --jf-palette-action-disabledBackground: var(--gh-neutral-subtle);
+  --jf-palette-error-main: var(--gh-danger);
+  --jf-palette-error-light: var(--gh-danger-fg);
+  --jf-palette-error-dark: var(--gh-danger);
+  --jf-palette-error-contrastText: var(--gh-fg-on-emphasis);
+  --jf-palette-success-main: var(--gh-success);
+  --jf-palette-success-light: var(--gh-success-fg);
+  --jf-palette-success-dark: var(--gh-success);
+  --jf-palette-success-contrastText: var(--gh-fg-on-emphasis);
+  --jf-palette-warning-main: var(--gh-attention-fg);
+  --jf-palette-info-main: var(--gh-accent-fg);
+  --jf-palette-AppBar-defaultBg: var(--gh-header-bg);
+  --jf-palette-AppBar-darkBg: var(--gh-header-bg);
+  --jf-palette-AppBar-transparentBg: var(--gh-header-bg);
+  --jf-palette-Avatar-defaultBg: var(--gh-btn-bg);
+  --jf-palette-Button-inheritContainedBg: var(--gh-btn-bg);
+  --jf-palette-Button-inheritContainedHoverBg: var(--gh-btn-hover-bg);
+  --jf-palette-Chip-defaultBorder: var(--gh-border);
+  --jf-palette-FilledInput-bg: var(--gh-canvas);
+  --jf-palette-FilledInput-hoverBg: var(--gh-canvas);
+  --jf-palette-FilledInput-borderColor: var(--gh-border);
+  --jf-palette-LinearProgress-primaryBg: var(--gh-neutral-muted);
+  --jf-palette-LinearProgress-successBg: var(--gh-neutral-muted);
+  --jf-palette-SnackbarContent-bg: var(--gh-overlay);
+  --jf-palette-SnackbarContent-color: var(--gh-fg);
+  --jf-palette-TableCell-border: var(--gh-border-muted);
+  --jf-palette-Tooltip-bg: var(--gh-overlay);
+  --jf-palette-Alert-infoFilledBg: var(--gh-canvas-subtle);
+  --jf-palette-Alert-infoFilledColor: var(--gh-fg);
+  --jf-shadows-1: none;
+  --jf-shadows-2: none;
+  --jf-shadows-4: none;
+  --jf-shadows-8: var(--gh-shadow-overlay);
+  --jf-shadows-16: var(--gh-shadow-overlay);
+  --jf-overlays-1: none;
+  --jf-overlays-2: none;
+  --jf-overlays-4: none;
+  --jf-overlays-8: none;
+  --jf-overlays-16: none;
+  --jf-font-button: 500 0.875rem/1.75 var(--gh-font);
+  --jf-font-h1: 600 1.8rem/1.25 var(--gh-font-heading);
+  --jf-font-h2: 600 1.5rem/1.25 var(--gh-font-heading);
+  --jf-font-h3: 600 1.17rem/1.25 var(--gh-font-heading);
+  --jf-font-h4: 600 2.125rem/1.25 var(--gh-font-heading);
+  --jf-font-h5: 600 1.5rem/1.334 var(--gh-font-heading);
+  --jf-font-h6: 600 1.25rem/1.5 var(--gh-font-heading);
+  --jf-font-subtitle1: 400 1rem/1.75 var(--gh-font);
+  --jf-font-subtitle2: 600 0.875rem/1.57 var(--gh-font);
+  --jf-font-body1: 400 1rem/1.5 var(--gh-font);
+  --jf-font-body2: 400 0.875rem/1.43 var(--gh-font);
+  --jf-font-caption: 400 0.75rem/1.66 var(--gh-font);
+  --jf-font-overline: 600 0.75rem/2.66 var(--gh-font);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 3. Base                                                                   */
+/* ------------------------------------------------------------------------ */
+
+html,
+html[lang] {
+  font-family: var(--gh-font);
+  color: var(--gh-fg);
+  background-color: var(--gh-canvas);
+}
+
+body,
+.skinHeader,
+.backgroundContainer,
+.nowPlayingPlaylist,
+.nowPlayingContextMenu,
+.ui-corner-all,
+.ui-shadow,
+.wizardStartForm {
+  color: var(--gh-fg);
+}
+
+html,
+.backgroundContainer,
+.nowPlayingPlaylist,
+.ui-corner-all,
+.ui-shadow,
+.wizardStartForm,
+.mainDrawer,
+.drawer-open,
+.noBackdropTransparency .detailPageWrapperContainer,
+.noBackdropTransparency .detailPagePrimaryContainer,
+.noBackdropTransparency .detailPageSecondaryContainer {
+  background-color: var(--gh-canvas);
+  background-image: none;
+}
+
+.backgroundContainer.withBackdrop {
+  background-color: rgb(var(--gh-canvas-channel) / 0.88);
+  opacity: 1;
+}
+
+/* MUI hard-codes Noto Sans in its generated classes */
+html body [class*="Mui"]:not(.material-icons),
+.emby-button,
+button,
+input,
+select,
+textarea {
+  font-family: var(--gh-font);
+}
+
+h1,
+h2,
+h3,
+.sectionTitle,
+.itemName,
+.pageTitle,
+.MuiTypography-h1,
+.MuiTypography-h2,
+.MuiTypography-h3,
+.MuiTypography-h4,
+.MuiTypography-h5,
+.MuiTypography-h6 {
+  font-family: var(--gh-font-heading) !important;
+}
+
+a {
+  color: var(--gh-accent-fg);
+}
+
+::selection {
+  background-color: rgb(var(--gh-accent-channel) / 0.4);
+}
+
+code,
+pre,
+kbd,
+.textarea-mono {
+  font-family: var(--gh-font-mono) !important;
+}
+
+* {
+  scrollbar-color: var(--gh-border) transparent;
+}
+
+::-webkit-scrollbar-track {
+  box-shadow: none;
+}
+
+::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb:horizontal,
+::-webkit-scrollbar-thumb:vertical {
+  background: var(--gh-border);
+  border-radius: 6px;
+}
+
+/* Focus: Primer's 2px accent ring */
+:focus-visible,
+.emby-button.show-focus:focus,
+.paper-icon-button-light.show-focus:focus,
+.emby-tab-button.show-focus:focus {
+  outline: 2px solid var(--gh-accent) !important;
+  outline-offset: -2px;
+  box-shadow: none;
+}
+
+.emby-button.show-focus:focus {
+  background: var(--gh-btn-bg);
+  color: var(--gh-fg);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 4. Header                                                                 */
+/* ------------------------------------------------------------------------ */
+
+/* legacy header (10.10 / 10.11, and the mobile drawer header) */
+.skinHeader-withBackground,
+.skinHeader.semiTransparent,
+.skinHeader-blurred {
+  background-color: var(--gh-header-bg) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  border-bottom: 1px solid var(--gh-header-border);
+  color: var(--gh-header-fg);
+}
+
+.skinHeader.semiTransparent {
+  background-color: rgb(var(--gh-canvas-channel) / 0.75) !important;
+}
+
+.pageTitle {
+  color: var(--gh-header-fg);
+  font-weight: 600;
+  font-size: 1.05em;
+}
+
+.headerButton {
+  color: var(--gh-header-fg);
+}
+
+.headerRight .headerButton,
+.headerLeft .headerButton {
+  border-radius: var(--gh-radius);
+}
+
+/* 12.x MUI app bar */
+html body .MuiAppBar-root {
+  background-color: var(--gh-header-bg);
+  background-image: none;
+  color: var(--gh-header-fg);
+  border-bottom: 1px solid var(--gh-header-border);
+  box-shadow: none;
+}
+
+html body .MuiAppBar-root .MuiButton-root {
+  color: var(--gh-header-fg);
+  border-radius: var(--gh-radius);
+  font-weight: 400;
+  font-size: 0.875rem;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  min-width: 0;
+}
+
+html body .MuiAppBar-root .MuiButton-root .MuiSvgIcon-root {
+  color: var(--gh-fg-muted);
+  font-size: 1.15rem;
+}
+
+html body .MuiAppBar-root .MuiButton-root:hover {
+  background-color: var(--gh-hover);
+}
+
+/* logo + "Jellyfin": bold, like the repo name in GitHub's top bar */
+html body .MuiAppBar-root .MuiButton-sizeLarge {
+  font-weight: 600;
+}
+
+/* current section: underline nav */
+html body .MuiAppBar-root .MuiButton-colorPrimary {
+  color: var(--gh-header-fg);
+  font-weight: 600;
+}
+
+html body .MuiAppBar-root .MuiButton-colorPrimary .MuiSvgIcon-root {
+  color: var(--gh-header-fg);
+}
+
+html body .MuiAppBar-root .MuiButton-colorPrimary::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: -7px;
+  height: 2px;
+  border-radius: 6px;
+  background: var(--gh-underline);
+}
+
+/* bordered icon buttons, as in GitHub's header */
+html body .MuiAppBar-root .MuiIconButton-root,
+.headerRight .headerButton {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+  color: var(--gh-fg-muted);
+  padding: 6px;
+  margin-left: 4px;
+  margin-right: 4px;
+}
+
+html body .MuiAppBar-root .MuiIconButton-root:hover,
+.headerRight .headerButton:hover {
+  background-color: var(--gh-hover);
+  color: var(--gh-fg);
+}
+
+html body .MuiAppBar-root .MuiIconButton-root .MuiSvgIcon-root {
+  font-size: 1.15rem;
+}
+
+html body .MuiAppBar-root .MuiIconButton-root:has(.MuiAvatar-root),
+.headerRight .headerUserButton {
+  border-radius: 50%;
+  padding: 2px;
+}
+
+html body .MuiAvatar-root.MuiAvatar-colorDefault {
+  background-color: var(--gh-btn-bg);
+  color: var(--gh-fg-muted);
+  width: 30px;
+  height: 30px;
+}
+
+/* the library title row in the second app bar toolbar */
+html body .MuiAppBar-root .MuiToolbar-root + .MuiToolbar-root {
+  border-top: 1px solid var(--gh-border-muted);
+}
+
+html body .MuiAppBar-root .MuiToolbar-root + .MuiToolbar-root .MuiButton-sizeLarge {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 5. Tabs (Primer UnderlineNav)                                             */
+/* ------------------------------------------------------------------------ */
+
+.headerTabs {
+  border-top: 1px solid var(--gh-border-muted);
+}
+
+.emby-tab-button {
+  color: var(--gh-fg-muted);
+  font-weight: 400;
+  font-size: 0.875rem;
+  letter-spacing: 0;
+  text-transform: none;
+  border-radius: var(--gh-radius);
+  position: relative;
+}
+
+.emby-tab-button:hover {
+  color: var(--gh-fg);
+  background-color: var(--gh-hover);
+}
+
+.emby-tab-button-active,
+.emby-tab-button-active:hover {
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+.emby-tab-button-active::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  right: 8px;
+  bottom: 0;
+  height: 2px;
+  border-radius: 6px;
+  background: var(--gh-underline);
+}
+
+.guide-date-tab-button {
+  color: var(--gh-fg-muted);
+}
+
+.guide-date-tab-button.emby-tab-button-active,
+.guide-date-tab-button:focus {
+  color: var(--gh-fg);
+}
+
+/* 12.x MUI tabs */
+html body .MuiTab-root {
+  color: var(--gh-fg-muted);
+  text-transform: none;
+}
+
+html body .MuiTab-root.Mui-selected {
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+html body .MuiTabs-indicator {
+  background-color: var(--gh-underline);
+  height: 2px;
+  border-radius: 6px;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 6. Side drawer / navigation                                               */
+/* ------------------------------------------------------------------------ */
+
+.mainDrawer {
+  border-right: 1px solid var(--gh-border);
+}
+
+.navMenuOption {
+  color: var(--gh-fg);
+  border-radius: var(--gh-radius);
+  margin: 1px 8px;
+}
+
+.navMenuOption:hover {
+  background: var(--gh-hover);
+}
+
+.navMenuOption-selected {
+  background: var(--gh-neutral-muted) !important;
+  color: var(--gh-fg) !important;
+  font-weight: 600;
+  position: relative;
+}
+
+.navMenuOption-selected::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  border-radius: 6px;
+  background: var(--gh-accent);
+}
+
+.navMenuOptionIcon,
+.sidebarHeader {
+  color: var(--gh-fg-muted);
+}
+
+.sidebarHeader {
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 7. Buttons                                                                */
+/* ------------------------------------------------------------------------ */
+
+/* default button */
+.raised,
+.fab,
+a[data-role="button"],
+.emby-button.raised {
+  background: var(--gh-btn-bg);
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-btn-border);
+  border-radius: var(--gh-radius);
+  box-shadow: var(--gh-shadow-small);
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.raised:hover,
+.fab:hover,
+a[data-role="button"]:hover {
+  background: var(--gh-btn-hover-bg);
+  border-color: var(--gh-btn-hover-border);
+}
+
+.raised:focus,
+.fab:focus,
+a[data-role="button"]:focus {
+  background: var(--gh-btn-bg);
+}
+
+.fab {
+  border-radius: 50%;
+}
+
+/* primary button (green) */
+.button-submit,
+.emby-button.button-submit,
+.raised.button-submit {
+  background: var(--gh-btn-primary-bg);
+  color: var(--gh-btn-primary-fg);
+  border: 1px solid rgb(var(--gh-fg-channel) / 0.1);
+  font-weight: 600;
+}
+
+.button-submit:hover,
+.button-submit:focus,
+.raised.button-submit:hover,
+.raised.button-submit:focus {
+  background: var(--gh-btn-primary-hover-bg);
+  color: var(--gh-btn-primary-fg);
+  border-color: rgb(var(--gh-fg-channel) / 0.1);
+}
+
+/* danger button */
+.button-delete,
+.raised.button-delete {
+  background: var(--gh-btn-bg);
+  color: var(--gh-danger-fg);
+  border: 1px solid var(--gh-btn-border);
+}
+
+.button-delete:hover,
+.raised.button-delete:hover {
+  background: var(--gh-danger);
+  color: var(--gh-fg-on-emphasis);
+  border-color: var(--gh-danger);
+}
+
+/* link-style buttons */
+.button-link,
+.button-flat:hover {
+  color: var(--gh-accent-fg);
+}
+
+.button-link:hover {
+  text-decoration: underline;
+}
+
+/* icon buttons */
+.paper-icon-button-light {
+  border-radius: var(--gh-radius);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .paper-icon-button-light:hover:not(:disabled) {
+    background-color: var(--gh-hover);
+    color: var(--gh-fg);
+  }
+}
+
+.paper-icon-button-light:active:not(:disabled) {
+  background-color: var(--gh-neutral-muted);
+  color: var(--gh-fg);
+}
+
+.buttonActive {
+  color: var(--gh-accent-fg) !important;
+}
+
+.playstatebutton-icon-played {
+  color: var(--gh-success-fg) !important;
+}
+
+.ratingbutton-icon-withrating {
+  color: var(--gh-danger-fg) !important;
+}
+
+/* MUI buttons */
+html body .MuiButton-root {
+  text-transform: none;
+  border-radius: var(--gh-radius);
+  box-shadow: none;
+}
+
+html body .MuiButton-contained,
+html body .MuiButtonGroup-contained {
+  box-shadow: none;
+}
+
+html body .MuiButton-containedPrimary,
+html body .MuiButton-containedSuccess {
+  background-color: var(--gh-btn-primary-bg);
+  color: var(--gh-btn-primary-fg);
+  border: 1px solid rgb(var(--gh-fg-channel) / 0.1);
+  font-weight: 600;
+  box-shadow: none;
+}
+
+html body .MuiButton-containedPrimary:hover,
+html body .MuiButton-containedSuccess:hover {
+  background-color: var(--gh-btn-primary-hover-bg);
+  box-shadow: none;
+}
+
+html body .MuiButtonGroup-root .MuiButtonGroup-grouped:not(:last-of-type) {
+  border-right-color: rgb(0 0 0 / 0.25);
+}
+
+html body .MuiButton-containedError {
+  background-color: var(--gh-btn-bg);
+  color: var(--gh-danger-fg);
+  border: 1px solid var(--gh-btn-border);
+  font-weight: 600;
+}
+
+html body .MuiButton-containedError:hover {
+  background-color: var(--gh-danger);
+  border-color: var(--gh-danger);
+  color: var(--gh-fg-on-emphasis);
+}
+
+html body .MuiButton-containedInherit,
+html body .MuiButton-outlined {
+  background-color: var(--gh-btn-bg);
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-btn-border);
+}
+
+html body .MuiButton-textPrimary:not(.MuiAppBar-root *) {
+  color: var(--gh-accent-fg);
+}
+
+html body .MuiIconButton-root {
+  border-radius: var(--gh-radius);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 8. Forms                                                                  */
+/* ------------------------------------------------------------------------ */
+
+.emby-input,
+.emby-textarea,
+.emby-select-withcolor {
+  background: var(--gh-canvas);
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius);
+}
+
+.emby-input:focus,
+.emby-textarea:focus,
+.emby-select-withcolor:focus {
+  border-color: var(--gh-accent) !important;
+  box-shadow: inset 0 0 0 1px var(--gh-accent);
+  outline: none !important;
+}
+
+.emby-select-withcolor > option {
+  background: var(--gh-overlay);
+  color: var(--gh-fg);
+}
+
+.inputLabel,
+.inputLabelUnfocused,
+.selectLabel,
+.textareaLabelUnfocused,
+.checkboxListLabel,
+.paperListLabel {
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+.inputLabelFocused,
+.selectLabelFocused,
+.textareaLabelFocused {
+  color: var(--gh-fg);
+}
+
+.fieldDescription {
+  color: var(--gh-fg-muted);
+}
+
+.checkboxOutline {
+  border-color: var(--gh-border) !important;
+  border-width: 1px;
+  border-radius: 4px;
+  background: var(--gh-canvas);
+}
+
+.emby-checkbox:checked + span + .checkboxOutline {
+  background-color: var(--gh-accent);
+  border-color: var(--gh-accent) !important;
+}
+
+.emby-checkbox:focus + span + .checkboxOutline {
+  outline: 2px solid var(--gh-accent);
+  outline-offset: 1px;
+}
+
+.checkboxIcon-checked {
+  color: var(--gh-fg-on-emphasis);
+}
+
+html body .MuiInputBase-root,
+html body .MuiFilledInput-root,
+html body .MuiOutlinedInput-root {
+  border-radius: var(--gh-radius);
+}
+
+html body .MuiOutlinedInput-notchedOutline {
+  border-color: var(--gh-border);
+}
+
+html body .Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-color: var(--gh-accent);
+}
+
+html body .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: var(--gh-success);
+  opacity: 1;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 9. Cards, posters, section titles                                         */
+/* ------------------------------------------------------------------------ */
+
+.sectionTitle,
+.sectionTitle-cards,
+.sectionTitleTextButton > h2,
+.sectionTitleTextButton > h3 {
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+.sectionTitleTextButton,
+.sectionTitleTextButton:hover {
+  color: var(--gh-fg) !important;
+}
+
+.sectionTitleTextButton > .material-icons {
+  color: var(--gh-fg-muted);
+}
+
+.blurhash-canvas,
+.cardContent,
+.cardImageContainer,
+.cardOverlayContainer,
+.cardPadder,
+.cardScalable,
+.visualCardBox,
+.itemDetailImage,
+.listItemImage {
+  border-radius: var(--gh-radius-lg);
+}
+
+.cardBox:not(.visualCardBox) .cardScalable {
+  box-shadow: 0 0 0 var(--gh-card-border-width) var(--gh-border);
+  transition: box-shadow 0.15s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .card:hover .cardBox:not(.visualCardBox) .cardScalable {
+    box-shadow: 0 0 0 1px var(--gh-fg-subtle);
+  }
+}
+
+.card:focus .cardBox.visualCardBox,
+.card:focus .cardBox:not(.visualCardBox) .cardScalable,
+.card.show-focus:not(.show-animation) .cardBox.visualCardBox,
+.card.show-focus:not(.show-animation) .cardBox:not(.visualCardBox) .cardScalable {
+  border-color: transparent !important;
+  border-radius: var(--gh-radius-lg) !important;
+  box-shadow: 0 0 0 2px var(--gh-accent) !important;
+}
+
+.visualCardBox,
+.cardBox:not(.visualCardBox) .cardPadder,
+.paperList {
+  background-color: var(--gh-canvas-subtle);
+}
+
+.visualCardBox {
+  border: var(--gh-card-border-width) solid var(--gh-border);
+}
+
+.cardPadder .cardImageIcon,
+.cardImageIcon {
+  color: var(--gh-fg-subtle);
+}
+
+/* placeholder backgrounds (no image) */
+.defaultCardBackground,
+.defaultCardBackground1,
+.defaultCardBackground2,
+.defaultCardBackground3,
+.defaultCardBackground4,
+.defaultCardBackground5 {
+  background-color: var(--gh-canvas-subtle) !important;
+  background-image: linear-gradient(135deg, rgb(var(--gh-accent-channel) / 0.08), transparent 60%);
+  color: var(--gh-fg-muted);
+}
+
+.defaultCardBackground .cardImageIcon,
+.defaultCardBackground .material-icons {
+  color: var(--gh-fg-subtle);
+}
+
+.cardText {
+  color: var(--gh-fg);
+}
+
+.cardText-first,
+.cardText-first a,
+.cardText-first bdi {
+  font-weight: 600;
+}
+
+.cardText-first .textActionButton:hover,
+.cardText a:hover {
+  color: var(--gh-accent-fg);
+  text-decoration: underline;
+}
+
+.cardText-secondary,
+.secondaryText,
+.listItem .secondary,
+.nowPlayingBarSecondaryText,
+.programSecondaryTitle,
+.guide-programNameCaret {
+  color: var(--gh-fg-muted);
+}
+
+.cardFooter-vibrant .cardText-secondary {
+  opacity: 0.75;
+}
+
+.cardOverlayContainer {
+  background: rgb(1 4 9 / 0.55);
+}
+
+.cardOverlayButton,
+.cardOverlayButton-hover {
+  color: #ffffff;
+}
+
+/* small badges: Primer Counter / Label */
+.countIndicator,
+.fullSyncIndicator,
+.mediaSourceIndicator,
+.playedIndicator {
+  background: var(--gh-accent);
+  color: var(--gh-fg-on-emphasis);
+  box-shadow: 0 0 0 1px rgb(1 4 9 / 0.35);
+  font-weight: 600;
+}
+
+.countIndicator > svg,
+.fullSyncIndicator > svg,
+.mediaSourceIndicator > svg,
+.playedIndicator > svg {
+  fill: var(--gh-fg-on-emphasis);
+}
+
+.countIndicator {
+  background: var(--gh-canvas-subtle);
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-border);
+  border-radius: 2em;
+  font-size: 0.75rem;
+}
+
+html body .MuiChip-root {
+  background-color: var(--gh-neutral-muted);
+  color: var(--gh-fg);
+  height: 20px;
+  border-radius: 2em;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+html body .MuiChip-label {
+  padding: 0 7px;
+}
+
+.mediaInfoText,
+.mediaInfoOfficialRating,
+.mediaInfoCriticRating {
+  background: transparent;
+  color: var(--gh-fg-muted);
+  border: 1px solid var(--gh-border);
+  border-radius: 2em;
+  font-weight: 500;
+}
+
+/* progress bars */
+.itemProgressBar {
+  background: var(--gh-neutral-muted);
+}
+
+.itemProgressBarForeground {
+  background-color: var(--gh-accent);
+}
+
+.itemProgressBarForeground-recording {
+  background-color: var(--gh-danger-fg);
+}
+
+html body .MuiLinearProgress-root {
+  border-radius: 6px;
+  background-color: var(--gh-neutral-muted);
+}
+
+html body .MuiLinearProgress-barColorSuccess {
+  background-color: var(--gh-success-fg);
+}
+
+/* scroller arrows */
+.emby-scrollbuttons-button {
+  color: var(--gh-fg-muted);
+}
+
+/* alpha picker */
+.alphaPickerButton {
+  color: var(--gh-fg-muted);
+  border-radius: var(--gh-radius);
+}
+
+.alphaPickerButton-selected {
+  color: var(--gh-fg-on-emphasis);
+  background-color: var(--gh-accent) !important;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 10. Item details                                                          */
+/* ------------------------------------------------------------------------ */
+
+.detailRibbon {
+  background: rgb(var(--gh-canvas-channel) / 0.8);
+  border-top: 1px solid var(--gh-border-muted);
+  border-bottom: 1px solid var(--gh-border-muted);
+}
+
+.itemName,
+.itemName.infoText {
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+.parentName,
+.itemMiscInfo,
+.itemMiscInfo .mediaInfoItem {
+  color: var(--gh-fg-muted);
+}
+
+.starIcon {
+  color: var(--gh-attention-fg);
+}
+
+.mainDetailButtons {
+  gap: 8px;
+}
+
+.detailButton {
+  background: var(--gh-btn-bg);
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-btn-border);
+  border-radius: var(--gh-radius);
+  padding: 0.45em !important;
+}
+
+.detailButton:hover {
+  background: var(--gh-btn-hover-bg);
+  border-color: var(--gh-btn-hover-border);
+  color: var(--gh-fg);
+}
+
+.detailButton-icon {
+  font-size: 1.3em !important;
+}
+
+.mainDetailButtons .btnPlay {
+  background: var(--gh-btn-primary-bg);
+  color: var(--gh-btn-primary-fg);
+  border-color: rgb(var(--gh-fg-channel) / 0.1);
+}
+
+.mainDetailButtons .btnPlay:hover {
+  background: var(--gh-btn-primary-hover-bg);
+  color: var(--gh-btn-primary-fg);
+}
+
+.emby-button.detailFloatingButton {
+  background-color: var(--gh-btn-primary-bg);
+  color: var(--gh-btn-primary-fg);
+}
+
+.itemOverview,
+.overview-text {
+  color: var(--gh-fg);
+}
+
+.itemDetailsGroup .label,
+.detailsGroupItem .label,
+.itemDetailsGroup .MuiTypography-root.label,
+.mediaInfoLabel {
+  color: var(--gh-fg-muted) !important;
+}
+
+.itemDetailsGroup .content,
+.detailsGroupItem .content,
+.detailsGroupItem a,
+.itemDetailsGroup a {
+  color: var(--gh-fg) !important;
+}
+
+.itemDetailsGroup a:hover,
+.detailsGroupItem a:hover,
+.itemTags a:hover,
+.itemExternalLinks a:hover {
+  color: var(--gh-accent-fg) !important;
+}
+
+.itemTags a,
+.itemExternalLinks a,
+.itemLinks a {
+  color: var(--gh-accent-fg) !important;
+  font-weight: 500;
+}
+
+.itemTags,
+.itemExternalLinks {
+  color: var(--gh-fg-muted);
+}
+
+.detailImageContainer .card .cardScalable,
+.detailImageContainer .cardImageContainer {
+  border-radius: var(--gh-radius-lg);
+}
+
+.emby-collapsible-button {
+  border-color: var(--gh-border);
+  border-radius: var(--gh-radius);
+}
+
+.collapseContent {
+  background-color: var(--gh-canvas-subtle);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-lg);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 11. Lists (episodes, playlists, settings)                                 */
+/* ------------------------------------------------------------------------ */
+
+.listItem {
+  color: var(--gh-fg);
+  border-radius: var(--gh-radius);
+}
+
+.listItem:hover {
+  background-color: var(--gh-hover);
+}
+
+.listItem:focus {
+  background-color: var(--gh-hover);
+}
+
+.listItem-border {
+  border-color: var(--gh-border-muted) !important;
+}
+
+.paperList {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-lg);
+}
+
+.listItemBodyText {
+  color: var(--gh-fg);
+}
+
+.listItemBodyText.secondary,
+.listItem-overview,
+.listItem-bottomoverview {
+  color: var(--gh-fg-muted);
+}
+
+.listItemImage {
+  box-shadow: 0 0 0 var(--gh-card-border-width) var(--gh-border);
+}
+
+/* episode / track lists as a bordered Box with divided rows */
+#childrenContent > .itemsContainer.vertical-list,
+.playlistItems.vertical-list,
+#listChildrenCollapsible .vertical-list {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-lg);
+  overflow: hidden;
+  padding: 0 !important;
+  margin-right: 3.3% !important;
+}
+
+#childrenContent > .itemsContainer.vertical-list > .listItem,
+.playlistItems.vertical-list > .listItem,
+#listChildrenCollapsible .vertical-list > .listItem {
+  border-radius: 0;
+  border-bottom: 1px solid var(--gh-border-muted);
+}
+
+#childrenContent > .itemsContainer.vertical-list > .listItem:last-child,
+.playlistItems.vertical-list > .listItem:last-child,
+#listChildrenCollapsible .vertical-list > .listItem:last-child {
+  border-bottom: 0;
+}
+
+.layout-mobile #childrenContent > .itemsContainer.vertical-list,
+.layout-mobile .playlistItems.vertical-list,
+.layout-mobile #listChildrenCollapsible .vertical-list {
+  margin-right: 0 !important;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 12. Dialogs, action sheets, menus, toasts                                 */
+/* ------------------------------------------------------------------------ */
+
+.dialog,
+.formDialogHeader:not(.formDialogHeader-clear),
+.formDialogFooter:not(.formDialogFooter-clear) {
+  background-color: var(--gh-overlay);
+  color: var(--gh-fg);
+}
+
+.dialog:not(.dialog-fullscreen) {
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-lg) !important;
+  box-shadow: var(--gh-shadow-overlay);
+}
+
+.formDialogHeader:not(.formDialogHeader-clear) {
+  border-bottom: 1px solid var(--gh-border-muted);
+}
+
+.formDialogFooter:not(.formDialogFooter-clear) {
+  border-top: 1px solid var(--gh-border-muted);
+}
+
+.dialogBackdropOpened {
+  background-color: rgb(1 4 9 / 0.6);
+  opacity: 1 !important;
+}
+
+/* "more" menu: Primer ActionMenu */
+.actionSheet {
+  background-color: var(--gh-overlay) !important;
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-border) !important;
+  border-radius: var(--gh-radius-lg) !important;
+  box-shadow: var(--gh-shadow-overlay);
+  overflow: hidden;
+}
+
+.actionSheetContent {
+  padding: 8px 0;
+}
+
+.actionSheetMenuItem {
+  border-radius: var(--gh-radius) !important;
+  margin: 0 8px !important;
+  width: calc(100% - 16px) !important;
+  padding-top: 0.35em !important;
+  padding-bottom: 0.35em !important;
+  min-height: 0 !important;
+}
+
+.actionSheetMenuItem:hover,
+.actionSheetMenuItem:focus {
+  background-color: var(--gh-hover) !important;
+}
+
+.actionSheetItemText {
+  color: var(--gh-fg);
+  font-size: 0.875rem;
+}
+
+.actionsheetMenuItemIcon {
+  color: var(--gh-fg-muted);
+  font-size: 1.15em !important;
+}
+
+.actionSheetMenuItem[data-id="delete"] .actionSheetItemText,
+.actionSheetMenuItem[data-id="delete"] .actionsheetMenuItemIcon {
+  color: var(--gh-danger-fg);
+}
+
+.actionSheetMenuItem[data-id="delete"]:hover {
+  background-color: rgb(248 81 73 / 0.1) !important;
+}
+
+.actionsheetDivider {
+  background: var(--gh-border-muted);
+  margin: 6px 0 !important;
+}
+
+.actionSheetTitle {
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+/* MUI menus / popovers (user menu, library view menu) */
+html body .MuiPopover-paper,
+html body .MuiMenu-paper,
+html body .MuiDialog-paper {
+  background-color: var(--gh-overlay);
+  background-image: none;
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-lg);
+  box-shadow: var(--gh-shadow-overlay);
+}
+
+html body .MuiMenu-list {
+  padding: 8px 0;
+}
+
+html body .MuiMenuItem-root {
+  border-radius: var(--gh-radius);
+  margin: 0 8px;
+  min-height: 32px;
+  font-size: 0.875rem;
+}
+
+html body .MuiMenuItem-root:hover {
+  background-color: var(--gh-hover);
+}
+
+html body .MuiMenuItem-root .MuiListItemIcon-root,
+html body .MuiMenuItem-root .MuiSvgIcon-root {
+  color: var(--gh-fg-muted);
+  min-width: 32px;
+  font-size: 1.15rem;
+}
+
+html body .MuiDivider-root {
+  border-color: var(--gh-border-muted);
+}
+
+html body .MuiTooltip-tooltip {
+  background-color: var(--gh-overlay);
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-border);
+}
+
+.toast {
+  background: var(--gh-overlay);
+  color: var(--gh-fg);
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-lg);
+  box-shadow: var(--gh-shadow-overlay);
+}
+
+.infoBanner {
+  background: rgb(var(--gh-accent-channel) / 0.1);
+  color: var(--gh-fg);
+  border: 1px solid rgb(var(--gh-accent-channel) / 0.4);
+  border-radius: var(--gh-radius);
+}
+
+/* selection mode */
+.itemSelectionPanel {
+  border-color: var(--gh-accent);
+}
+
+.selectionCommandsPanel {
+  background: var(--gh-accent);
+  color: var(--gh-fg-on-emphasis) !important;
+}
+
+.upNextDialog-countdownText,
+.metadataSidebarIcon {
+  color: var(--gh-accent-fg);
+}
+
+.progressring-spiner {
+  border-color: var(--gh-accent);
+}
+
+/* bottom player bar */
+.appfooter,
+.playlistSectionButton,
+.nowPlayingBar {
+  background: var(--gh-canvas-subtle);
+  color: var(--gh-fg);
+  border-top: 1px solid var(--gh-border);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 13. Live TV guide                                                         */
+/* ------------------------------------------------------------------------ */
+
+.channelPrograms,
+.guide-channelHeaderCell,
+.programCell {
+  border-color: var(--gh-border-muted) !important;
+}
+
+.guide-channelHeaderCell,
+.channelsContainer,
+.guide-headerTimeslots,
+.timeslotHeaders {
+  background-color: var(--gh-canvas);
+}
+
+.timeslotHeader,
+.guide-headerTimeslots {
+  color: var(--gh-fg-muted);
+}
+
+.programCell {
+  color: var(--gh-fg);
+}
+
+.programCell-active {
+  background: var(--gh-canvas-subtle) !important;
+}
+
+.programCell-sports {
+  background: rgb(47 129 247 / 0.18) !important;
+}
+
+.programCell-movie {
+  background: rgb(163 113 247 / 0.2) !important;
+}
+
+.programCell-kids {
+  background: rgb(210 153 34 / 0.2) !important;
+}
+
+.programCell-news {
+  background: rgb(63 185 80 / 0.18) !important;
+}
+
+.guide-programTextIcon {
+  background: var(--gh-neutral-muted);
+  color: var(--gh-fg);
+  border-radius: 2em;
+}
+
+.guide-channelHeaderCell:focus,
+.programCell:focus {
+  background-color: rgb(var(--gh-accent-channel) / 0.25) !important;
+  color: var(--gh-fg) !important;
+  outline: 2px solid var(--gh-accent);
+  outline-offset: -2px;
+}
+
+.guide-channelNumber,
+.guideChannelNumber {
+  color: var(--gh-fg-muted);
+  font-family: var(--gh-font-mono);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 14. Login                                                                 */
+/* ------------------------------------------------------------------------ */
+
+#loginPage h1,
+#loginPage .sectionTitle {
+  font-weight: 300;
+  font-size: 1.6em;
+  letter-spacing: -0.5px;
+}
+
+#loginPage .manualLoginForm,
+#loginPage .readOnlyContent {
+  background: var(--gh-canvas-subtle);
+  border: 1px solid var(--gh-border-muted);
+  border-radius: var(--gh-radius-lg);
+  padding: 16px !important;
+  box-sizing: border-box;
+}
+
+#loginPage .readOnlyContent .raised,
+#loginPage .manualLoginForm .raised {
+  margin-left: 0;
+  margin-right: 0;
+  width: 100%;
+}
+
+#loginPage .loginDisclaimer {
+  color: var(--gh-fg-muted);
+}
+
+#loginPage .cardText {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 15. Dashboard (12.x / 10.11 MUI, 10.10 legacy)                            */
+/* ------------------------------------------------------------------------ */
+
+html body .MuiDrawer-paper {
+  background-color: var(--gh-canvas);
+  background-image: none;
+  border-right: 1px solid var(--gh-border) !important;
+}
+
+html body .MuiListSubheader-root {
+  color: var(--gh-fg-muted);
+  background-color: transparent;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root {
+  border-radius: var(--gh-radius);
+  margin: 1px 8px;
+  padding-top: 6px;
+  padding-bottom: 6px;
+  position: relative;
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root:hover {
+  background-color: var(--gh-hover);
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root.Mui-selected,
+html body .MuiDrawer-paper .MuiListItemButton-root.Mui-selected:hover {
+  background-color: var(--gh-neutral-muted);
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root.Mui-selected .MuiTypography-root {
+  font-weight: 600;
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root.Mui-selected::before {
+  content: "";
+  position: absolute;
+  left: -8px;
+  top: 6px;
+  bottom: 6px;
+  width: 4px;
+  border-radius: 6px;
+  background: var(--gh-accent);
+}
+
+html body .MuiDrawer-paper .MuiListItemIcon-root {
+  color: var(--gh-fg-muted);
+  min-width: 36px;
+}
+
+html body .MuiDrawer-paper .MuiListItemIcon-root .MuiSvgIcon-root {
+  font-size: 1.15rem;
+}
+
+html body .MuiPaper-root.MuiCard-root,
+html body .MuiPaper-root.MuiPaper-elevation1,
+html body .MuiPaper-outlined,
+html body main .MuiPaper-rounded:not(.MuiMenu-paper):not(.MuiPopover-paper) {
+  background-color: var(--gh-canvas);
+  background-image: none;
+  border: 1px solid var(--gh-border);
+  border-radius: var(--gh-radius-lg);
+  box-shadow: none;
+}
+
+html body .MuiCardMedia-root.defaultCardBackground {
+  border-bottom: 1px solid var(--gh-border-muted);
+}
+
+html body .MuiCardActions-root {
+  background-color: var(--gh-canvas-subtle);
+}
+
+html body .MuiListItemAvatar-root .MuiAvatar-root,
+html body main .MuiAvatar-root {
+  background-color: var(--gh-canvas-subtle);
+  color: var(--gh-fg-muted);
+  border: 1px solid var(--gh-border);
+}
+
+html body .MuiListItemText-secondary {
+  color: var(--gh-fg-muted);
+}
+
+html body .MuiTypography-h3,
+html body .MuiTypography-h5 {
+  font-weight: 600;
+}
+
+html body .MuiTableCell-root {
+  border-color: var(--gh-border-muted);
+}
+
+html body .MuiTableHead-root .MuiTableCell-root {
+  background-color: var(--gh-canvas-subtle);
+  font-weight: 600;
+}
+
+html body .MuiAlert-root {
+  border-radius: var(--gh-radius);
+  border: 1px solid var(--gh-border);
+}
+
+/* 10.10 legacy dashboard */
+.dashboardSection .paperList,
+.serverInfo.paperList {
+  background-color: var(--gh-canvas);
+}
+
+.dashboardSection .sectionTitleTextButton h3 {
+  font-weight: 600;
+}
+
+.activeSession .cardFooter,
+.activeSession .visualCardBox {
+  background-color: var(--gh-canvas-subtle);
+}
+
+.sessionNowPlayingTime,
+.sessionAppSecondaryText,
+.sessionNowPlayingName {
+  color: var(--gh-fg-muted);
+}
+
+.sessionDeviceName {
+  color: var(--gh-fg);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 16. Media players                                                         */
+/* ------------------------------------------------------------------------ */
+
+#bookPlayer,
+#comicsPlayer,
+#pdfPlayer,
+#dialogToc,
+#comicsPlayer .swiper-pagination {
+  background-color: var(--gh-canvas);
+  color: var(--gh-fg);
+}
+
+.iconOsd,
+.upNextContainer {
+  border-radius: var(--gh-radius-lg);
+}
