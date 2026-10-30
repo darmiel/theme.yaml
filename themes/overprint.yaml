@@ -64,6 +64,7 @@ variants:
         --op-halftone-tint-blend: multiply;
         --op-halftone-base: #000000;
         --op-logo-filter: brightness(0) invert(0.92);
+        --op-channel-logo-blend: normal;
         --op-mark-filter: grayscale(1) brightness(2);
         --op-backdrop-filter: grayscale(1) contrast(1.1) brightness(0.8) sepia(1) hue-rotate(188deg) saturate(3);
         --op-backdrop-strength: 0.24;
@@ -73,6 +74,43 @@ variants:
       ink: "#ece9e0"
       grain: 0.4
       backdrop: 0.24
+  - id: night-heavy
+    name: Night stock, heavy ink
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/overprint.css");
+      :root {
+        --op-paper: #0b0b0e;
+        --op-ink: #f7f5ee;
+        --op-plate: #ff4fb8;
+        --op-on-plate: #0b0b0e;
+        --op-on-ink: #0b0b0e;
+        --op-ink-muted: #c9c7c0;
+        --op-ink-faint: #3a3a3e;
+        --op-danger: #ff7a6e;
+        --op-on-danger: #0b0b0e;
+        --op-placeholder: #1d1d23;
+        --op-on-placeholder: #f7f5ee;
+        --op-placeholder-dots: rgb(255 79 184 / 0.35);
+        --op-color-scheme: dark;
+        --op-grain: 0.16;
+        --op-grain-blend: screen;
+        --op-halftone: 0.5;
+        --op-halftone-blend: screen;
+        --op-halftone-dots: contrast(24) invert(1);
+        --op-halftone-tint-blend: multiply;
+        --op-halftone-base: #000000;
+        --op-logo-filter: brightness(0) invert(1);
+        --op-channel-logo-blend: normal;
+        --op-mark-filter: grayscale(1) brightness(2.4);
+        --op-backdrop-filter: grayscale(1) contrast(1.05) brightness(0.65) sepia(1) hue-rotate(188deg) saturate(2.2);
+        --op-backdrop-strength: 0.16;
+      }
+    settings:
+      paper: "#0b0b0e"
+      ink: "#f7f5ee"
+      plate: "#ff4fb8"
+      grain: 0.16
+      backdrop: 0.16
 groups:
   - id: inks
     label: Inks

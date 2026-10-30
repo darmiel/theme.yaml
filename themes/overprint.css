@@ -49,9 +49,15 @@
   --op-halftone-base: #ffffff;
   /* white logos get printed in ink */
   --op-logo-filter: brightness(0);
+  /* how channel logos in the guide sit on the paper */
+  --op-channel-logo-blend: multiply;
   /* the colored Jellyfin mark in the 12.x app bar, tinted toward the ink */
   --op-mark-filter: grayscale(1) brightness(0.55) sepia(1) hue-rotate(190deg) saturate(5);
   --op-danger: #c01d17;
+  /* cards without an image */
+  --op-placeholder: var(--op-ink);
+  --op-on-placeholder: var(--op-on-ink);
+  --op-placeholder-dots: color-mix(in srgb, var(--op-paper) 22%, transparent);
   --op-on-danger: #ffffff;
   /* backdrops: printed in ink only, then washed back with paper */
   --op-backdrop-filter: grayscale(1) contrast(0.7) brightness(1.4) sepia(1) hue-rotate(188deg) saturate(3.4);
@@ -942,10 +948,10 @@ html .defaultCardBackground2,
 html .defaultCardBackground3,
 html .defaultCardBackground4,
 html .defaultCardBackground5 {
-  background-color: var(--op-ink) !important;
-  background-image: radial-gradient(circle, color-mix(in srgb, var(--op-paper) 22%, transparent) 1.3px, transparent 1.8px) !important;
+  background-color: var(--op-placeholder) !important;
+  background-image: radial-gradient(circle, var(--op-placeholder-dots) 1.3px, transparent 1.8px) !important;
   background-size: 8px 8px !important;
-  color: var(--op-on-ink);
+  color: var(--op-on-placeholder);
 }
 
 html .defaultCardBackground2,
@@ -960,7 +966,7 @@ html .defaultCardBackground .material-icons,
 html .defaultCardBackground1 .cardImageIcon,
 html .defaultCardBackground3 .cardImageIcon,
 html .defaultCardBackground5 .cardImageIcon {
-  color: var(--op-on-ink);
+  color: var(--op-on-placeholder);
 }
 
 html .defaultCardBackground2 .cardImageIcon,
@@ -1614,7 +1620,7 @@ html .guideChannelNumber {
 html .guide-channelHeaderCell .guideChannelImage,
 html .guideChannelImage {
   filter: grayscale(1) contrast(1.2);
-  mix-blend-mode: multiply;
+  mix-blend-mode: var(--op-channel-logo-blend);
 }
 
 /* ------------------------------------------------------------------------ */
@@ -1694,8 +1700,8 @@ html body main .MuiPaper-rounded:not(.MuiMenu-paper):not(.MuiPopover-paper) {
 
 html body .MuiCardMedia-root.defaultCardBackground,
 html body main .MuiCard-root .MuiCardMedia-root {
-  background-color: var(--op-ink) !important;
-  color: var(--op-on-ink);
+  background-color: var(--op-placeholder) !important;
+  color: var(--op-on-placeholder);
 }
 
 html body .MuiCardActions-root {
