@@ -1,0 +1,1794 @@
+/*
+ * Overprint
+ * Two inks on newsprint, slightly out of register.
+ * https://github.com/darmiel/theme.yaml
+ *
+ * A risograph-style Jellyfin theme: an off-white paper stock, one dark "ink"
+ * for text and structure, one fluorescent "plate" printed a few pixels off,
+ * grain, a halftone spot and duotone backdrops. CSS only.
+ *
+ * Works on Jellyfin 12.x (MUI app bar, React dashboard) and 10.11 (legacy
+ * header). Everything reads the --op-* tokens below; editions only override
+ * them in a :root block after the @import.
+ *
+ * MIT License, (c) darmiel
+ */
+
+@import url("https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&family=DM+Mono:wght@400;500&display=swap");
+
+/* ------------------------------------------------------------------------ */
+/* 1. Tokens                                                                 */
+/* ------------------------------------------------------------------------ */
+
+:root {
+  /* the three "inks" */
+  --op-paper: #ebeae3;
+  --op-ink: #1b2a8c;
+  --op-plate: #ff48b0;
+  /* text printed on a plate-colored fill */
+  --op-on-plate: #111a58;
+  /* text printed on an ink-colored fill */
+  --op-on-ink: #ebeae3;
+  /* derived */
+  --op-ink-muted: color-mix(in srgb, var(--op-ink) 74%, var(--op-paper));
+  --op-ink-faint: color-mix(in srgb, var(--op-ink) 14%, var(--op-paper));
+  --op-ink-wash: color-mix(in srgb, var(--op-ink) 7%, var(--op-paper));
+  --op-plate-wash: color-mix(in srgb, var(--op-plate) 22%, var(--op-paper));
+  --op-paper-glass: color-mix(in srgb, var(--op-paper) 90%, transparent);
+  /* misregistration: text shadow and the plate block behind images */
+  --op-offset: 3px;
+  --op-plate-offset: 8px;
+  --op-rule: 2px;
+  /* texture */
+  --op-grain: 0.32;
+  --op-grain-blend: multiply;
+  --op-halftone: 1;
+  --op-halftone-blend: multiply;
+  --op-halftone-dots: contrast(24);
+  --op-halftone-tint-blend: screen;
+  --op-halftone-base: #ffffff;
+  /* white logos get printed in ink */
+  --op-logo-filter: brightness(0);
+  /* the colored Jellyfin mark in the 12.x app bar, tinted toward the ink */
+  --op-mark-filter: grayscale(1) brightness(0.55) sepia(1) hue-rotate(190deg) saturate(5);
+  --op-danger: #c01d17;
+  --op-on-danger: #ffffff;
+  /* backdrops: printed in ink only, then washed back with paper */
+  --op-backdrop-filter: grayscale(1) contrast(0.7) brightness(1.4) sepia(1) hue-rotate(188deg) saturate(3.4);
+  --op-backdrop-strength: 0.3;
+  --op-color-scheme: light;
+  /* type */
+  --op-font: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --op-font-mono: "DM Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --op-display-stretch: 125%;
+  --op-display-weight: 900;
+  --op-display-font: var(--op-font);
+  --op-display-case: uppercase;
+  /* motion */
+  --op-ease: cubic-bezier(0.2, 0.9, 0.25, 1);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 2. Bridge to Jellyfin's own palette (12.x and the MUI dashboard)          */
+/* ------------------------------------------------------------------------ */
+
+html:root,
+html[data-theme] {
+  color-scheme: var(--op-color-scheme);
+  --jf-shape-borderRadius: 0px;
+  --jf-card-borderRadius: 0px;
+  --jf-palette-primary-main: var(--op-ink);
+  --jf-palette-primary-light: var(--op-ink);
+  --jf-palette-primary-dark: var(--op-on-plate);
+  --jf-palette-primary-contrastText: var(--op-on-ink);
+  --jf-palette-secondary-main: var(--op-plate);
+  --jf-palette-secondary-light: var(--op-plate);
+  --jf-palette-secondary-dark: var(--op-plate);
+  --jf-palette-secondary-contrastText: var(--op-on-plate);
+  --jf-palette-background-default: var(--op-paper);
+  --jf-palette-background-paper: var(--op-paper);
+  --jf-palette-text-primary: var(--op-ink);
+  --jf-palette-text-secondary: var(--op-ink-muted);
+  --jf-palette-text-disabled: var(--op-ink-muted);
+  --jf-palette-text-icon: var(--op-ink);
+  --jf-palette-divider: var(--op-ink-faint);
+  --jf-palette-action-active: var(--op-ink);
+  --jf-palette-action-hover: var(--op-plate-wash);
+  --jf-palette-action-selected: var(--op-plate-wash);
+  --jf-palette-action-focus: var(--op-plate-wash);
+  --jf-palette-action-disabled: var(--op-ink-muted);
+  --jf-palette-action-disabledBackground: var(--op-ink-faint);
+  --jf-palette-error-main: var(--op-danger);
+  --jf-palette-error-contrastText: var(--op-on-danger);
+  --jf-palette-success-main: var(--op-ink);
+  --jf-palette-success-contrastText: var(--op-on-ink);
+  --jf-palette-warning-main: var(--op-plate);
+  --jf-palette-info-main: var(--op-ink);
+  --jf-palette-AppBar-defaultBg: var(--op-paper);
+  --jf-palette-AppBar-darkBg: var(--op-paper);
+  --jf-palette-AppBar-transparentBg: var(--op-paper);
+  --jf-palette-Avatar-defaultBg: var(--op-plate);
+  --jf-palette-Button-inheritContainedBg: var(--op-paper);
+  --jf-palette-Button-inheritContainedHoverBg: var(--op-plate);
+  --jf-palette-Chip-defaultBorder: var(--op-ink);
+  --jf-palette-FilledInput-bg: var(--op-paper);
+  --jf-palette-FilledInput-hoverBg: var(--op-ink-wash);
+  --jf-palette-LinearProgress-primaryBg: var(--op-ink-faint);
+  --jf-palette-SnackbarContent-bg: var(--op-ink);
+  --jf-palette-SnackbarContent-color: var(--op-on-ink);
+  --jf-palette-TableCell-border: var(--op-ink-faint);
+  --jf-palette-Tooltip-bg: var(--op-ink);
+  --jf-shadows-1: none;
+  --jf-shadows-2: none;
+  --jf-shadows-4: none;
+  --jf-shadows-8: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+  --jf-shadows-16: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+  --jf-overlays-1: none;
+  --jf-overlays-2: none;
+  --jf-overlays-4: none;
+  --jf-overlays-8: none;
+  --jf-overlays-16: none;
+  --jf-font-button: 500 0.8rem/1.75 var(--op-font-mono);
+  --jf-font-h1: 900 2rem/1.1 var(--op-font);
+  --jf-font-h2: 800 1.5rem/1.15 var(--op-font);
+  --jf-font-h3: 800 1.2rem/1.2 var(--op-font);
+  --jf-font-h4: 800 2rem/1.15 var(--op-font);
+  --jf-font-h5: 800 1.4rem/1.2 var(--op-font);
+  --jf-font-h6: 700 1.15rem/1.4 var(--op-font);
+  --jf-font-subtitle1: 400 1rem/1.6 var(--op-font);
+  --jf-font-subtitle2: 600 0.875rem/1.5 var(--op-font);
+  --jf-font-body1: 400 1rem/1.5 var(--op-font);
+  --jf-font-body2: 400 0.875rem/1.45 var(--op-font);
+  --jf-font-caption: 400 0.75rem/1.6 var(--op-font-mono);
+  --jf-font-overline: 500 0.72rem/2.4 var(--op-font-mono);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 3. Paper, grain, halftone, backdrops                                      */
+/* ------------------------------------------------------------------------ */
+
+html:root,
+html[lang] {
+  font-family: var(--op-font);
+  color: var(--op-ink);
+  background-color: var(--op-paper);
+}
+
+html body {
+  color: var(--op-ink);
+  background-color: var(--op-paper);
+  font-family: var(--op-font);
+}
+
+html .skinBody,
+html .backgroundContainer,
+html .mainDrawer,
+html .nowPlayingPlaylist,
+html .ui-corner-all,
+html .ui-shadow,
+html .wizardStartForm,
+html .noBackdropTransparency .detailPageWrapperContainer,
+html .noBackdropTransparency .detailPagePrimaryContainer,
+html .noBackdropTransparency .detailPageSecondaryContainer {
+  color: var(--op-ink);
+  background-color: var(--op-paper);
+  background-image: none;
+}
+
+/* grain: one fixed layer of turbulence over everything */
+html body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 99999;
+  pointer-events: none;
+  opacity: var(--op-grain);
+  mix-blend-mode: var(--op-grain-blend);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 1.6 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 240px 240px;
+}
+
+/* no grain over playing video */
+html:has(.videoPlayerContainer:not(.hide)) body::after,
+html:has(#videoOsdPage:not(.hide)) body::after {
+  display: none;
+}
+
+/* the page background: paper plus a halftone spot printed in the plate color */
+html .backgroundContainer,
+html .backgroundContainer.withBackdrop {
+  isolation: isolate;
+  mix-blend-mode: var(--op-halftone-blend);
+  background: var(--op-halftone-base);
+  opacity: 1;
+}
+
+html .backgroundContainer::before,
+html .backgroundContainer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--op-halftone);
+}
+
+/* soft dots + a brightness ramp, thresholded: dot size follows the ramp */
+html .backgroundContainer::before {
+  background:
+    radial-gradient(circle at 96% 4%, rgb(0 0 0 / 0.55), rgb(255 255 255 / 0) 14%, rgb(255 255 255 / 0.75) 28%, #ffffff 38%),
+    radial-gradient(closest-side, #000000, #ffffff) 0 0 / 11px 11px;
+  filter: var(--op-halftone-dots);
+}
+
+html .backgroundContainer::after {
+  background: var(--op-plate);
+  mix-blend-mode: var(--op-halftone-tint-blend);
+}
+
+html .layout-mobile .backgroundContainer::before {
+  background:
+    radial-gradient(circle at 100% 0%, rgb(0 0 0 / 0.5), rgb(255 255 255 / 0) 24%, rgb(255 255 255 / 0.7) 48%, #ffffff 64%),
+    radial-gradient(closest-side, #000000, #ffffff) 0 0 / 9px 9px;
+}
+
+/* backdrops: ink-only duotone */
+html .backdropContainer {
+  background: none;
+  opacity: var(--op-backdrop-strength);
+}
+
+html .backdropImage {
+  filter: var(--op-backdrop-filter);
+}
+
+/* pages that bring their own detail backdrop */
+html .itemBackdrop {
+  filter: var(--op-backdrop-filter);
+  opacity: 0.55;
+}
+
+html .itemBackdrop::after {
+  background: linear-gradient(to bottom, transparent 40%, var(--op-paper));
+}
+
+html ::selection {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+html a {
+  color: var(--op-ink);
+}
+
+html * {
+  scrollbar-color: var(--op-ink) transparent;
+}
+
+html ::-webkit-scrollbar-track {
+  box-shadow: none;
+}
+
+html ::-webkit-scrollbar-track-piece {
+  background-color: transparent;
+}
+
+html ::-webkit-scrollbar-thumb:horizontal,
+html ::-webkit-scrollbar-thumb:vertical {
+  background: var(--op-ink);
+  border-radius: 0;
+}
+
+/* fonts: MUI hard-codes Noto Sans in generated classes */
+html body [class*="Mui"]:not(.material-icons),
+html .emby-button,
+html button,
+html input,
+html select,
+html textarea {
+  font-family: var(--op-font);
+}
+
+html .material-icons {
+  font-family: "Material Icons" !important;
+}
+
+/* focus: a hard ink outline, offset like a crop mark */
+html :focus-visible,
+html .emby-button.show-focus:focus,
+html .paper-icon-button-light.show-focus:focus,
+html .emby-tab-button.show-focus:focus {
+  outline: 3px solid var(--op-ink) !important;
+  outline-offset: 2px;
+  box-shadow: none;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 4. Display type                                                           */
+/* ------------------------------------------------------------------------ */
+
+html .sectionTitle,
+html .sectionTitle-cards,
+html .sectionTitleTextButton > h2,
+html .sectionTitleTextButton > h3,
+html h1.pageTitle,
+html .itemName,
+html #loginPage h1,
+html .MuiTypography-h1,
+html .MuiTypography-h2,
+html .MuiTypography-h3,
+html .MuiTypography-h4 {
+  font-family: var(--op-display-font) !important;
+  font-stretch: var(--op-display-stretch);
+  font-weight: var(--op-display-weight);
+  text-transform: var(--op-display-case);
+  letter-spacing: -0.01em;
+  color: var(--op-ink);
+  text-shadow: var(--op-offset) calc(var(--op-offset) * 0.66) 0 var(--op-plate);
+}
+
+html .sectionTitle,
+html .sectionTitle-cards,
+html .sectionTitleTextButton > h2,
+html .sectionTitleTextButton > h3 {
+  font-size: 1.45rem;
+  line-height: 1.1;
+  margin-bottom: 0.7em;
+}
+
+html .homeSectionsContainer,
+html .libraryPage > .padded-top-focusscale:first-child {
+  padding-top: 0.9em;
+}
+
+html .sectionTitleContainer,
+html .sectionTitleContainer-cards {
+  margin-bottom: 0.15em;
+}
+
+html .sectionTitleTextButton,
+html .sectionTitleTextButton:hover {
+  color: var(--op-ink);
+}
+
+html .sectionTitleTextButton > .material-icons {
+  color: var(--op-ink);
+  font-size: 1.3em;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 5. Header                                                                 */
+/* ------------------------------------------------------------------------ */
+
+/* legacy header (10.11, and the mobile drawer header) */
+html .skinHeader,
+html .skinHeader-withBackground,
+html .skinHeader.semiTransparent,
+html .skinHeader-blurred {
+  background-color: var(--op-paper-glass) !important;
+  background-image: none !important;
+  -webkit-backdrop-filter: none !important;
+  backdrop-filter: none !important;
+  color: var(--op-ink);
+  box-shadow: none !important;
+}
+
+html .skinHeader-withBackground,
+html .skinHeader.semiTransparent {
+  border-bottom: var(--op-rule) solid var(--op-ink);
+}
+
+html .skinHeader.noHeaderRight:not(.skinHeader-withBackground) {
+  background-color: transparent !important;
+}
+
+/* the Jellyfin wordmark is white: print it in ink */
+html .pageTitleWithDefaultLogo,
+html .pageTitleWithLogo {
+  filter: var(--op-logo-filter) drop-shadow(1.5px 1px 0 var(--op-plate));
+  opacity: 0.9;
+}
+
+html h3.pageTitle,
+html .pageTitle {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.95em;
+}
+
+html .headerButton,
+html .headerButton .material-icons {
+  color: var(--op-ink);
+}
+
+html .headerRight .headerButton,
+html .headerLeft .headerButton {
+  border-radius: 0;
+}
+
+html .headerUserButtonRound,
+html .headerUserButton img {
+  border-radius: 0 !important;
+}
+
+/* 12.x MUI app bar */
+html body .MuiAppBar-root {
+  background-color: var(--op-paper-glass);
+  background-image: none;
+  color: var(--op-ink);
+  border-bottom: var(--op-rule) solid var(--op-ink);
+  box-shadow: none;
+}
+
+html body .MuiAppBar-root .MuiToolbar-root {
+  gap: 2px;
+}
+
+html body .MuiAppBar-root .MuiButton-root {
+  color: var(--op-ink);
+  border-radius: 0;
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  min-width: 0;
+  transition: background-color 120ms linear, box-shadow 160ms var(--op-ease);
+}
+
+html body .MuiAppBar-root .MuiButton-root .MuiSvgIcon-root {
+  color: var(--op-ink);
+  font-size: 1.05rem;
+}
+
+html body .MuiAppBar-root .MuiButton-root:hover {
+  background-color: var(--op-plate-wash);
+}
+
+/* logo + "Jellyfin": display type */
+html body .MuiAppBar-root .MuiButton-sizeLarge {
+  font-family: var(--op-font);
+  font-stretch: 125%;
+  font-weight: 900;
+  font-size: 0.95rem;
+  letter-spacing: 0;
+  margin-right: 10px;
+}
+
+html body .MuiAppBar-root .MuiButton-sizeLarge img,
+html body .MuiAppBar-root .MuiButton-sizeLarge svg {
+  filter: var(--op-mark-filter) drop-shadow(2px 1.5px 0 var(--op-plate));
+}
+
+html body .MuiAppBar-root .MuiButton-sizeLarge:hover {
+  background-color: transparent;
+}
+
+/* current section: printed on a plate block */
+html body .MuiAppBar-root .MuiButton-colorPrimary:not(.MuiButton-sizeLarge) {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+html body .MuiAppBar-root .MuiButton-colorPrimary:not(.MuiButton-sizeLarge) .MuiSvgIcon-root {
+  color: var(--op-on-plate);
+}
+
+html body .MuiAppBar-root .MuiIconButton-root,
+html .headerRight .headerButton {
+  color: var(--op-ink);
+  border-radius: 0;
+  padding: 7px;
+  transition: background-color 120ms linear;
+}
+
+html body .MuiAppBar-root .MuiIconButton-root:hover,
+html .headerRight .headerButton:hover {
+  background-color: var(--op-plate-wash);
+}
+
+html body .MuiAppBar-root .MuiIconButton-root .MuiSvgIcon-root {
+  color: var(--op-ink);
+  font-size: 1.3rem;
+}
+
+/* avatar: a square stamp */
+html body .MuiAvatar-root {
+  border-radius: 0;
+}
+
+html body .MuiAvatar-root.MuiAvatar-colorDefault {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+  box-shadow: inset 0 0 0 var(--op-rule) var(--op-ink);
+}
+
+html body .MuiAvatar-root.MuiAvatar-colorDefault .MuiSvgIcon-root {
+  color: var(--op-on-plate);
+}
+
+/* the library title row in the second app bar toolbar */
+html body .MuiAppBar-root .MuiToolbar-root + .MuiToolbar-root {
+  border-top: 1px solid var(--op-ink-faint);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 6. Tabs                                                                   */
+/* ------------------------------------------------------------------------ */
+
+html .headerTabs,
+html .sectionTabs {
+  color: var(--op-ink);
+}
+
+html .emby-tab-button {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  border-radius: 0;
+  padding: 0.75em 1em;
+}
+
+html .emby-tab-button:hover {
+  color: var(--op-ink);
+  background-color: var(--op-plate-wash);
+}
+
+html .emby-tab-button-active,
+html .emby-tab-button-active:hover {
+  color: var(--op-on-plate);
+  background-color: var(--op-plate);
+}
+
+html .guide-date-tab-button {
+  border-radius: 0;
+}
+
+html .guide-date-tab-button.emby-tab-button-active,
+html .guide-date-tab-button:focus {
+  color: var(--op-on-plate);
+  background-color: var(--op-plate);
+}
+
+html body .MuiTabs-root {
+  min-height: 0;
+}
+
+html body .MuiTab-root {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  min-height: 40px;
+  opacity: 1;
+}
+
+html body .MuiTab-root:hover {
+  background-color: var(--op-plate-wash);
+}
+
+html body .MuiTab-root.Mui-selected {
+  color: var(--op-on-plate);
+  background-color: var(--op-plate);
+}
+
+html body .MuiTabs-indicator {
+  background-color: var(--op-ink);
+  height: var(--op-rule);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 7. Side drawer                                                            */
+/* ------------------------------------------------------------------------ */
+
+html .mainDrawer {
+  border-right: var(--op-rule) solid var(--op-ink);
+}
+
+html .navMenuOption {
+  color: var(--op-ink);
+  border-radius: 0;
+  font-weight: 600;
+}
+
+html .navMenuOption:hover {
+  background-color: var(--op-plate-wash);
+}
+
+html .navMenuOption-selected {
+  background-color: var(--op-plate) !important;
+  color: var(--op-on-plate) !important;
+}
+
+html .navMenuOptionIcon {
+  color: inherit;
+}
+
+html .sidebarHeader {
+  color: var(--op-ink-muted);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  font-size: 0.75em;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 8. Buttons                                                                */
+/* ------------------------------------------------------------------------ */
+
+html .raised,
+html .fab,
+html a[data-role="button"],
+html .emby-button.raised {
+  background: var(--op-paper);
+  color: var(--op-ink);
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+  box-shadow: none;
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 0.82em;
+  transition: transform 140ms var(--op-ease), box-shadow 140ms var(--op-ease), background-color 120ms linear;
+}
+
+html .raised:hover,
+html .fab:hover,
+html a[data-role="button"]:hover {
+  background: var(--op-plate);
+  color: var(--op-on-plate);
+  box-shadow: 4px 3px 0 var(--op-ink);
+  transform: translate(-2px, -2px);
+}
+
+html .raised:active,
+html .fab:active {
+  transform: translate(0, 0);
+  box-shadow: none;
+}
+
+html .raised:focus,
+html .fab:focus,
+html a[data-role="button"]:focus {
+  background: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+html .fab {
+  border-radius: 0;
+}
+
+/* primary: solid ink, plate printed behind */
+html .button-submit,
+html .emby-button.button-submit,
+html .raised.button-submit {
+  background: var(--op-ink);
+  color: var(--op-on-ink);
+  border-color: var(--op-ink);
+  box-shadow: 4px 3px 0 var(--op-plate);
+}
+
+html .button-submit:hover,
+html .button-submit:focus,
+html .raised.button-submit:hover,
+html .raised.button-submit:focus {
+  background: var(--op-ink);
+  color: var(--op-on-ink);
+  box-shadow: 7px 5px 0 var(--op-plate);
+}
+
+html .button-delete,
+html .raised.button-delete {
+  background: var(--op-paper);
+  color: var(--op-danger);
+  border-color: var(--op-danger);
+}
+
+html .button-delete:hover,
+html .raised.button-delete:hover {
+  background: var(--op-danger);
+  color: var(--op-on-danger);
+}
+
+html .button-link,
+html .button-flat:hover {
+  color: var(--op-ink);
+}
+
+html .button-link {
+  text-decoration: underline;
+  text-decoration-color: var(--op-plate);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 3px;
+}
+
+html .paper-icon-button-light {
+  color: var(--op-ink);
+  border-radius: 0;
+}
+
+html .paper-icon-button-light:hover:not(:disabled) {
+  color: var(--op-on-plate);
+  background-color: var(--op-plate);
+}
+
+html .paper-icon-button-light:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+html .buttonActive,
+html .playstatebutton-icon-played,
+html .ratingbutton-icon-withrating {
+  color: var(--op-plate) !important;
+  text-shadow: 1px 1px 0 var(--op-ink);
+}
+
+/* MUI buttons (dashboard, dialogs) */
+html body .MuiButton-root:not(.MuiAppBar-root *) {
+  border-radius: 0;
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+html body .MuiButton-contained:not(.MuiAppBar-root *) {
+  box-shadow: 3px 2px 0 var(--op-plate);
+}
+
+html body .MuiButton-containedPrimary,
+html body .MuiButton-containedSuccess {
+  background-color: var(--op-ink);
+  color: var(--op-on-ink);
+}
+
+html body .MuiButton-containedPrimary:hover,
+html body .MuiButton-containedSuccess:hover {
+  background-color: var(--op-ink);
+  box-shadow: 5px 4px 0 var(--op-plate);
+}
+
+html body .MuiButton-containedError {
+  background-color: var(--op-danger);
+  color: var(--op-on-danger);
+  box-shadow: 3px 2px 0 var(--op-ink) !important;
+}
+
+html body .MuiButton-outlined {
+  border: var(--op-rule) solid var(--op-ink);
+  color: var(--op-ink);
+}
+
+html body .MuiIconButton-root {
+  border-radius: 0;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 9. Forms                                                                  */
+/* ------------------------------------------------------------------------ */
+
+html .emby-input,
+html .emby-textarea,
+html .emby-select-withcolor {
+  background: var(--op-paper);
+  color: var(--op-ink);
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+  font-family: var(--op-font);
+}
+
+html .emby-input:focus,
+html .emby-textarea:focus,
+html .emby-select-withcolor:focus {
+  border-color: var(--op-ink);
+  box-shadow: 4px 3px 0 var(--op-plate);
+  outline: none;
+}
+
+html .detailTrackSelect:disabled {
+  color: var(--op-ink);
+  opacity: 1;
+}
+
+html .emby-select-withcolor > option {
+  background: var(--op-paper);
+  color: var(--op-ink);
+}
+
+html .inputLabel,
+html .inputLabelUnfocused,
+html .selectLabel,
+html .textareaLabelUnfocused,
+html .checkboxListLabel,
+html .paperListLabel {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-size: 0.82em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+html .inputLabelFocused,
+html .selectLabelFocused,
+html .textareaLabelFocused {
+  color: var(--op-ink);
+}
+
+html .fieldDescription {
+  color: var(--op-ink-muted);
+}
+
+html .checkboxOutline {
+  border-color: var(--op-ink);
+  border-radius: 0;
+}
+
+html .emby-checkbox:checked + span + .checkboxOutline {
+  background-color: var(--op-plate);
+  border-color: var(--op-ink);
+}
+
+html .checkboxIcon-checked {
+  color: var(--op-on-plate);
+}
+
+html body .MuiInputBase-root,
+html body .MuiOutlinedInput-root,
+html body .MuiFilledInput-root {
+  border-radius: 0;
+  color: var(--op-ink);
+}
+
+html body .MuiOutlinedInput-notchedOutline {
+  border: var(--op-rule) solid var(--op-ink);
+}
+
+html body .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
+  background-color: var(--op-plate);
+  opacity: 1;
+}
+
+html body .MuiSwitch-thumb {
+  border-radius: 0;
+}
+
+html body .MuiSwitch-track {
+  border-radius: 0;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 10. Cards & posters: a plate block printed off-register behind each one   */
+/* ------------------------------------------------------------------------ */
+
+html .blurhash-canvas,
+html .cardContent,
+html .cardImageContainer,
+html .cardOverlayContainer,
+html .cardPadder,
+html .cardScalable,
+html .visualCardBox,
+html .itemDetailImage,
+html .listItemImage {
+  border-radius: 0;
+}
+
+html .cardBox:not(.visualCardBox) .cardScalable {
+  box-shadow: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+  transition: transform 180ms var(--op-ease), box-shadow 180ms var(--op-ease);
+}
+
+html .cardBox {
+  margin-right: calc(0.6em + var(--op-plate-offset) * 0.3);
+  margin-bottom: calc(0.6em + var(--op-plate-offset) * 0.3);
+}
+
+/* hover: a plate-colored dot screen is printed over the poster */
+html .cardBox:not(.visualCardBox) .cardScalable::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(circle, var(--op-plate) 1px, transparent 1.6px) 0 0 / 5px 5px;
+  mix-blend-mode: multiply;
+  opacity: 0;
+  transition: opacity 160ms linear;
+}
+
+@media (hover: hover) {
+  html .card:hover .cardBox:not(.visualCardBox) .cardScalable,
+  html .card:focus-within .cardBox:not(.visualCardBox) .cardScalable {
+    transform: translate(-3px, -3px);
+    box-shadow: calc(var(--op-plate-offset) + 4px) calc(var(--op-plate-offset) + 4px) 0 var(--op-plate);
+  }
+
+  html .card:hover .cardBox:not(.visualCardBox) .cardScalable::after {
+    opacity: 0.75;
+  }
+}
+
+html .card:focus .cardBox.visualCardBox,
+html .card:focus .cardBox:not(.visualCardBox) .cardScalable,
+html .card.show-focus:not(.show-animation) .cardBox.visualCardBox,
+html .card.show-focus:not(.show-animation) .cardBox:not(.visualCardBox) .cardScalable {
+  outline: 3px solid var(--op-ink);
+  outline-offset: 2px;
+}
+
+html .visualCardBox,
+html .cardBox:not(.visualCardBox) .cardPadder {
+  background-color: var(--op-ink-faint);
+}
+
+html .visualCardBox {
+  border: var(--op-rule) solid var(--op-ink);
+  box-shadow: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+}
+
+/* placeholders: ink with a printed dot screen */
+html .defaultCardBackground,
+html .defaultCardBackground1,
+html .defaultCardBackground2,
+html .defaultCardBackground3,
+html .defaultCardBackground4,
+html .defaultCardBackground5 {
+  background-color: var(--op-ink) !important;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--op-paper) 22%, transparent) 1.3px, transparent 1.8px) !important;
+  background-size: 8px 8px !important;
+  color: var(--op-on-ink);
+}
+
+html .defaultCardBackground2,
+html .defaultCardBackground4 {
+  background-color: var(--op-plate) !important;
+  background-image: radial-gradient(circle, color-mix(in srgb, var(--op-ink) 30%, transparent) 1.3px, transparent 1.8px) !important;
+  color: var(--op-on-plate);
+}
+
+html .defaultCardBackground .cardImageIcon,
+html .defaultCardBackground .material-icons,
+html .defaultCardBackground1 .cardImageIcon,
+html .defaultCardBackground3 .cardImageIcon,
+html .defaultCardBackground5 .cardImageIcon {
+  color: var(--op-on-ink);
+}
+
+html .defaultCardBackground2 .cardImageIcon,
+html .defaultCardBackground4 .cardImageIcon {
+  color: var(--op-on-plate);
+}
+
+html .cardImageIcon {
+  color: var(--op-ink);
+}
+
+html .cardText {
+  color: var(--op-ink);
+}
+
+html .cardText-first,
+html .cardText-first a,
+html .cardText-first bdi {
+  color: var(--op-ink);
+  font-weight: 700;
+}
+
+html .cardText-first .textActionButton:hover,
+html .cardText a:hover {
+  text-decoration: underline;
+  text-decoration-color: var(--op-plate);
+  text-decoration-thickness: 3px;
+}
+
+html .cardText-secondary,
+html .secondaryText,
+html .listItemMediaInfo,
+html .nowPlayingBarSecondaryText,
+html .programSecondaryTitle {
+  color: var(--op-ink-muted);
+  font-family: var(--op-font-mono);
+  font-size: 0.82em;
+  letter-spacing: 0.02em;
+}
+
+html .cardFooter {
+  padding-top: 0.55em;
+}
+
+html .cardFooter-vibrant .cardText-secondary {
+  color: inherit;
+}
+
+/* overlay play / more buttons over posters */
+html .cardOverlayContainer {
+  background: color-mix(in srgb, var(--op-ink) 16%, transparent);
+}
+
+html .cardOverlayButton,
+html .cardOverlayButton-hover {
+  color: var(--op-on-ink);
+  border-radius: 0;
+}
+
+html .cardOverlayFab-primary {
+  background-color: var(--op-ink) !important;
+  color: var(--op-on-ink) !important;
+  border-radius: 0 !important;
+  box-shadow: 3px 2px 0 var(--op-plate);
+}
+
+html .cardOverlayButton:hover,
+html .cardOverlayFab-primary:hover {
+  background-color: var(--op-plate) !important;
+  color: var(--op-on-plate) !important;
+}
+
+/* badges: square stamps */
+html .countIndicator,
+html .fullSyncIndicator,
+html .mediaSourceIndicator,
+html .playedIndicator {
+  background: var(--op-plate);
+  color: var(--op-on-plate);
+  border-radius: 0;
+  box-shadow: 2px 2px 0 var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+}
+
+html .countIndicator > svg,
+html .fullSyncIndicator > svg,
+html .mediaSourceIndicator > svg,
+html .playedIndicator > svg,
+html .playedIndicator .material-icons {
+  color: var(--op-on-plate);
+}
+
+html body .MuiChip-root {
+  border-radius: 0;
+  font-family: var(--op-font-mono);
+}
+
+html .mediaInfoText,
+html .mediaInfoOfficialRating,
+html .mediaInfoCriticRating {
+  border: 1.5px solid var(--op-ink);
+  border-radius: 0;
+  background: transparent;
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+}
+
+/* progress: a plate-colored bar on a faint ink track */
+html .itemProgressBar {
+  background: var(--op-ink-faint);
+  height: 6px;
+}
+
+html .itemProgressBarForeground {
+  background-color: var(--op-plate);
+}
+
+html .itemProgressBarForeground-recording {
+  background-color: var(--op-danger);
+}
+
+html body .MuiLinearProgress-root {
+  background-color: var(--op-ink-faint);
+  border-radius: 0;
+}
+
+html body .MuiLinearProgress-bar {
+  background-color: var(--op-plate);
+}
+
+html .emby-scrollbuttons-button {
+  color: var(--op-ink);
+}
+
+html .emby-scrollbuttons-button:disabled {
+  color: var(--op-ink-faint);
+}
+
+html .alphaPicker-vertical,
+html .alphaPicker {
+  background-color: var(--op-paper);
+}
+
+html .alphaPicker-vertical {
+  box-shadow: inset 0 0 0 1.5px var(--op-ink);
+  padding: 0.3em 0;
+}
+
+html .alphaPickerButton {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  border-radius: 0;
+}
+
+html .alphaPickerButton-selected {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 11. Item details                                                          */
+/* ------------------------------------------------------------------------ */
+
+html .detailRibbon,
+html .detailPagePrimaryContainer,
+html .detailPageWrapperContainer,
+html .detailPageSecondaryContainer {
+  background: transparent !important;
+  color: var(--op-ink);
+}
+
+html .layout-desktop .detailRibbon,
+html .layout-tv .detailRibbon {
+  border-top: var(--op-rule) solid var(--op-ink);
+  border-bottom: var(--op-rule) solid var(--op-ink);
+  background: var(--op-paper-glass) !important;
+}
+
+/* the title logo is white: print it in ink, plate off-register */
+html .detailLogo {
+  filter: var(--op-logo-filter) drop-shadow(5px 3px 0 var(--op-plate));
+  opacity: 0.9;
+}
+
+html .itemName,
+html .itemName.infoText {
+  font-size: clamp(1.9rem, 3.4vw, 3.1rem);
+  line-height: 1.02;
+  margin-bottom: 0.15em;
+}
+
+html .layout-mobile .itemName,
+html .layout-mobile .itemName.infoText {
+  font-size: 1.9rem;
+}
+
+html .nameContainer .parentName,
+html .nameContainer .subtitle {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+html .itemMiscInfo,
+html .itemMiscInfo .mediaInfoItem {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-size: 0.95rem;
+}
+
+html .starIcon {
+  color: var(--op-plate);
+  text-shadow: 1px 1px 0 var(--op-ink);
+}
+
+html .mainDetailButtons {
+  gap: 6px;
+}
+
+html .detailButton {
+  color: var(--op-ink);
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+  background: var(--op-paper);
+  transition: transform 140ms var(--op-ease), box-shadow 140ms var(--op-ease), background-color 120ms linear;
+}
+
+html .detailButton:hover {
+  background: var(--op-plate);
+  color: var(--op-on-plate);
+  transform: translate(-2px, -2px);
+  box-shadow: 4px 3px 0 var(--op-ink);
+}
+
+html .detailButton:active {
+  transform: none;
+  box-shadow: none;
+}
+
+html .detailButton-icon {
+  color: inherit;
+}
+
+html .mainDetailButtons .btnPlay {
+  background: var(--op-ink);
+  color: var(--op-on-ink);
+  box-shadow: 4px 3px 0 var(--op-plate);
+}
+
+html .mainDetailButtons .btnPlay:hover {
+  background: var(--op-ink);
+  color: var(--op-on-ink);
+  box-shadow: 7px 5px 0 var(--op-plate);
+}
+
+html .emby-button.detailFloatingButton {
+  background-color: var(--op-ink);
+  color: var(--op-on-ink);
+  border-radius: 0;
+  box-shadow: 4px 3px 0 var(--op-plate);
+}
+
+html .itemOverview,
+html .overview-text {
+  color: var(--op-ink);
+  font-size: 1.02rem;
+  line-height: 1.6;
+  max-width: 68ch;
+}
+
+html .itemDetailsGroup .label,
+html .detailsGroupItem .label,
+html .itemDetailsGroup .MuiTypography-root.label,
+html .mediaInfoLabel {
+  color: var(--op-ink-muted);
+  font-family: var(--op-font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+html .itemDetailsGroup .content,
+html .detailsGroupItem .content,
+html .mediaInfoContent,
+html .detailsGroupItem a,
+html .itemDetailsGroup a {
+  color: var(--op-ink);
+  font-weight: 700;
+}
+
+html .itemTags,
+html .itemExternalLinks {
+  color: var(--op-ink-muted);
+  font-family: var(--op-font-mono);
+  font-size: 0.85rem;
+}
+
+html .itemTags a,
+html .itemExternalLinks a,
+html .itemLinks a,
+html .detailsGroupItem a,
+html .itemDetailsGroup a {
+  color: var(--op-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--op-plate);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 2px;
+}
+
+html .itemTags a:hover,
+html .itemExternalLinks a:hover,
+html .detailsGroupItem a:hover,
+html .itemDetailsGroup a:hover {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+/* the big poster: heavier plate */
+html .detailImageContainer .card .cardScalable {
+  box-shadow: calc(var(--op-plate-offset) * 1.75) calc(var(--op-plate-offset) * 1.5) 0 var(--op-plate) !important;
+  outline: var(--op-rule) solid var(--op-ink);
+}
+
+html .detailImageContainer .cardImageContainer {
+  border-radius: 0;
+}
+
+html .emby-collapsible-button {
+  color: var(--op-ink);
+  border-bottom: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+}
+
+html .collapseContent {
+  background: transparent;
+  border-radius: 0;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 12. Lists (episodes, playlists, settings)                                 */
+/* ------------------------------------------------------------------------ */
+
+html .listItem {
+  color: var(--op-ink);
+  border-radius: 0;
+}
+
+html .listItem:hover {
+  background-color: var(--op-ink-wash);
+}
+
+html .listItem:focus {
+  background-color: var(--op-plate-wash);
+}
+
+html .listItem-border {
+  border-bottom: 1px solid var(--op-ink-faint);
+}
+
+html .listItemBodyText {
+  color: var(--op-ink);
+}
+
+html .listItemBodyText:first-child {
+  font-weight: 700;
+}
+
+html .listItemBodyText.secondary,
+html .listItem-overview,
+html .listItem-bottomoverview {
+  color: var(--op-ink-muted);
+  font-weight: 400;
+}
+
+html .listItemImage {
+  border-radius: 0;
+  box-shadow: 5px 4px 0 var(--op-plate);
+}
+
+html .paperList {
+  background-color: var(--op-paper);
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+}
+
+html #childrenContent > .itemsContainer.vertical-list > .listItem,
+html .playlistItems.vertical-list > .listItem,
+html #listChildrenCollapsible .vertical-list > .listItem {
+  border-bottom: 1px solid var(--op-ink-faint);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 13. Dialogs, action sheets, menus, toasts                                 */
+/* ------------------------------------------------------------------------ */
+
+html .dialog,
+html .formDialogHeader:not(.formDialogHeader-clear),
+html .formDialogFooter:not(.formDialogFooter-clear) {
+  background-color: var(--op-paper);
+  color: var(--op-ink);
+}
+
+html .dialog:not(.dialog-fullscreen) {
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+  box-shadow: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+}
+
+html .formDialogHeader:not(.formDialogHeader-clear) {
+  border-bottom: var(--op-rule) solid var(--op-ink);
+}
+
+html .formDialogFooter:not(.formDialogFooter-clear) {
+  border-top: var(--op-rule) solid var(--op-ink);
+}
+
+html .dialogBackdropOpened {
+  background-color: color-mix(in srgb, var(--op-paper) 55%, transparent);
+  opacity: 1;
+}
+
+html .actionSheet {
+  background-color: var(--op-paper);
+  color: var(--op-ink);
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+  box-shadow: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+  padding: 4px 0;
+}
+
+html .actionSheetContent {
+  padding: 0;
+}
+
+html .actionSheetMenuItem {
+  color: var(--op-ink);
+  border-radius: 0;
+  min-height: 2.6em;
+  padding: 0 0.9em;
+}
+
+html .actionSheetMenuItem:hover,
+html .actionSheetMenuItem:focus {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+html .actionSheetItemText {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+html .actionsheetMenuItemIcon {
+  color: inherit;
+  font-size: 1.25em !important;
+}
+
+html .actionSheetMenuItem[data-id="delete"] .actionSheetItemText,
+html .actionSheetMenuItem[data-id="delete"] .actionsheetMenuItemIcon {
+  color: var(--op-danger);
+}
+
+html .actionSheetMenuItem[data-id="delete"]:hover {
+  background-color: var(--op-danger);
+}
+
+html .actionSheetMenuItem[data-id="delete"]:hover .actionSheetItemText,
+html .actionSheetMenuItem[data-id="delete"]:hover .actionsheetMenuItemIcon {
+  color: var(--op-on-danger);
+}
+
+html .actionsheetDivider {
+  background: var(--op-ink-faint);
+  height: 1px;
+}
+
+html .actionSheetTitle {
+  color: var(--op-ink);
+  font-family: var(--op-font);
+  font-stretch: 125%;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+html body .MuiPopover-paper,
+html body .MuiMenu-paper,
+html body .MuiDialog-paper {
+  background-color: var(--op-paper);
+  background-image: none;
+  color: var(--op-ink);
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+  box-shadow: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+}
+
+html body .MuiMenu-list {
+  padding: 4px 0;
+}
+
+html body .MuiMenuItem-root {
+  color: var(--op-ink);
+  font-weight: 600;
+  min-height: 40px;
+}
+
+html body .MuiMenuItem-root:hover,
+html body .MuiMenuItem-root.Mui-focusVisible {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+html body .MuiMenuItem-root .MuiListItemIcon-root,
+html body .MuiMenuItem-root .MuiSvgIcon-root {
+  color: inherit;
+}
+
+html body .MuiListSubheader-root {
+  background: transparent;
+  color: var(--op-ink-muted);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+html body .MuiDivider-root {
+  border-color: var(--op-ink-faint);
+}
+
+html body .MuiTooltip-tooltip {
+  background-color: var(--op-ink);
+  color: var(--op-on-ink);
+  border-radius: 0;
+  font-family: var(--op-font-mono);
+}
+
+html .toast {
+  background: var(--op-ink);
+  color: var(--op-on-ink);
+  border-radius: 0;
+  box-shadow: 4px 3px 0 var(--op-plate);
+  font-family: var(--op-font-mono);
+}
+
+html .itemSelectionPanel {
+  border-color: var(--op-plate);
+}
+
+html .selectionCommandsPanel {
+  background: var(--op-ink);
+  color: var(--op-on-ink);
+}
+
+/* now playing bar */
+html .appfooter,
+html .nowPlayingBar {
+  background: var(--op-paper) !important;
+  color: var(--op-ink);
+  border-top: var(--op-rule) solid var(--op-ink);
+}
+
+html .nowPlayingBar .material-icons,
+html .nowPlayingBarTop .material-icons {
+  color: var(--op-ink);
+}
+
+html .nowPlayingBarPositionSlider::-webkit-slider-thumb {
+  background: var(--op-plate);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 14. Live TV guide                                                         */
+/* ------------------------------------------------------------------------ */
+
+html .channelPrograms,
+html .guide-channelHeaderCell,
+html .programCell {
+  border-color: var(--op-ink-faint) !important;
+}
+
+html .guide-channelHeaderCell,
+html .channelsContainer,
+html .guide-headerTimeslots,
+html .timeslotHeaders {
+  background: var(--op-paper);
+  color: var(--op-ink);
+}
+
+html .timeslotHeader,
+html .guide-headerTimeslots {
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+  font-weight: 500;
+}
+
+html .guide-headerTimeslots {
+  border-bottom: var(--op-rule) solid var(--op-ink);
+}
+
+html .programCell {
+  color: var(--op-ink);
+  background: transparent;
+}
+
+html .programCell:hover {
+  background: var(--op-ink-wash);
+}
+
+html .programCell-active {
+  background: var(--op-plate-wash) !important;
+  color: var(--op-ink) !important;
+}
+
+html .channelPrograms,
+html .programGrid {
+  background-color: var(--op-paper);
+}
+
+html .programCell-sports,
+html .programCell-movie,
+html .programCell-kids,
+html .programCell-news {
+  background: var(--op-ink-wash);
+  box-shadow: inset 4px 0 0 var(--op-plate);
+}
+
+html .guide-programTextIcon {
+  background: var(--op-ink);
+  color: var(--op-on-ink);
+  border-radius: 0;
+  font-family: var(--op-font-mono);
+}
+
+html .guide-channelHeaderCell:focus,
+html .programCell:focus {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+html .guide-channelNumber,
+html .guideChannelNumber {
+  font-family: var(--op-font-mono);
+  color: var(--op-ink);
+}
+
+html .guide-channelHeaderCell .guideChannelImage,
+html .guideChannelImage {
+  filter: grayscale(1) contrast(1.2);
+  mix-blend-mode: multiply;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 15. Login                                                                 */
+/* ------------------------------------------------------------------------ */
+
+html #loginPage h1 {
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1;
+  margin-bottom: 0.6em;
+  text-shadow: calc(var(--op-offset) * 1.6) calc(var(--op-offset)) 0 var(--op-plate);
+}
+
+html #loginPage .manualLoginForm,
+html #loginPage .readOnlyContent {
+  background: transparent;
+}
+
+html #loginPage .raised {
+  margin: 0.45em 0;
+}
+
+html #loginPage .loginDisclaimer {
+  color: var(--op-ink-muted);
+}
+
+html #loginPage .cardText {
+  color: var(--op-ink);
+  font-weight: 700;
+}
+
+/* ------------------------------------------------------------------------ */
+/* 16. Dashboard (MUI)                                                       */
+/* ------------------------------------------------------------------------ */
+
+html body .MuiDrawer-paper {
+  background-color: var(--op-paper);
+  background-image: none;
+  color: var(--op-ink);
+  border-right: var(--op-rule) solid var(--op-ink) !important;
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root {
+  color: var(--op-ink);
+  border-radius: 0;
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root:hover {
+  background-color: var(--op-plate-wash);
+}
+
+html body .MuiDrawer-paper .MuiListItemButton-root.Mui-selected,
+html body .MuiDrawer-paper .MuiListItemButton-root.Mui-selected:hover {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+}
+
+html body .MuiDrawer-paper .MuiListItemIcon-root,
+html body .MuiDrawer-paper .MuiListItemIcon-root .MuiSvgIcon-root {
+  color: inherit;
+}
+
+html body .MuiDrawer-paper .MuiListItemText-primary {
+  font-weight: 600;
+}
+
+html body .MuiPaper-root.MuiCard-root,
+html body .MuiPaper-root.MuiPaper-elevation1,
+html body .MuiPaper-outlined,
+html body main .MuiPaper-rounded:not(.MuiMenu-paper):not(.MuiPopover-paper) {
+  background-color: var(--op-paper);
+  background-image: none;
+  border: var(--op-rule) solid var(--op-ink);
+  border-radius: 0;
+  box-shadow: 6px 5px 0 var(--op-plate);
+}
+
+html body .MuiCardMedia-root.defaultCardBackground,
+html body main .MuiCard-root .MuiCardMedia-root {
+  background-color: var(--op-ink) !important;
+  color: var(--op-on-ink);
+}
+
+html body .MuiCardActions-root {
+  border-top: 1px solid var(--op-ink-faint);
+}
+
+html body .MuiListItemAvatar-root .MuiAvatar-root,
+html body main .MuiAvatar-root {
+  background-color: var(--op-plate);
+  color: var(--op-on-plate);
+  border-radius: 0;
+}
+
+html body main .MuiAvatar-root .MuiSvgIcon-root {
+  color: var(--op-on-plate);
+}
+
+html body .MuiListItemText-secondary {
+  color: var(--op-ink-muted);
+  font-family: var(--op-font-mono);
+  font-size: 0.8rem;
+}
+
+html body .MuiTableCell-root {
+  border-color: var(--op-ink-faint);
+  color: var(--op-ink);
+}
+
+html body .MuiTableHead-root .MuiTableCell-root {
+  font-family: var(--op-font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  border-bottom: var(--op-rule) solid var(--op-ink);
+}
+
+html body .MuiAlert-root {
+  border-radius: 0;
+  border: var(--op-rule) solid var(--op-ink);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 17. Players                                                               */
+/* ------------------------------------------------------------------------ */
+
+html .videoOsdBottom .osdTextContainer,
+html .videoOsdBottom .material-icons {
+  color: #ffffff;
+}
+
+html .mdl-slider-background-lower,
+html .sliderBufferBar {
+  background-color: var(--op-plate) !important;
+}
+
+html .mdl-slider::-webkit-slider-thumb {
+  background-color: var(--op-plate) !important;
+  border-radius: 0 !important;
+}
+
+html #bookPlayer,
+html #comicsPlayer,
+html #pdfPlayer,
+html #dialogToc {
+  background: var(--op-paper);
+  color: var(--op-ink);
+}
+
+/* ------------------------------------------------------------------------ */
+/* 18. Motion                                                                */
+/* ------------------------------------------------------------------------ */
+
+/* titles land like a second pass through the press */
+@keyframes op-register {
+  from {
+    text-shadow: calc(var(--op-offset) * 4) calc(var(--op-offset) * -2) 0 var(--op-plate);
+  }
+  to {
+    text-shadow: var(--op-offset) calc(var(--op-offset) * 0.66) 0 var(--op-plate);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html .itemName,
+  html #loginPage h1 {
+    animation: op-register 520ms var(--op-ease) both;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html .cardBox .cardScalable::after,
+  html .cardBox .cardScalable,
+  html .raised,
+  html .detailButton {
+    transition: none !important;
+  }
+}

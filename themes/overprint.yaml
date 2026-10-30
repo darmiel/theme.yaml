@@ -1,0 +1,188 @@
+# yaml-language-server: $schema=../schema.json
+owners:
+  - darmiel
+name: Overprint
+author: darmiel
+author_url: https://github.com/darmiel
+repo: https://github.com/darmiel/theme.yaml
+description: A risograph-style theme with two inks on off-white paper, grain, a halftone corner and backdrops printed in one color. Posters and dialogs get a second color block printed slightly out of register, headings use wide uppercase type and labels use a monospace font.
+versions:
+  - "10.11"
+  - "12"
+recommends:
+  backdrops: true
+variants:
+  - id: pink-blue
+    name: Pink and Blue
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/overprint.css");
+  - id: orange-teal
+    name: Orange and Teal
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/overprint.css");
+      :root {
+        --op-ink: #0b4f5c;
+        --op-plate: #ff6c2f;
+        --op-on-plate: #062f37;
+        --op-backdrop-filter: grayscale(1) contrast(0.7) brightness(1.4) sepia(1) hue-rotate(145deg) saturate(1.6);
+        --op-mark-filter: grayscale(1) brightness(0.5) sepia(1) hue-rotate(140deg) saturate(3);
+      }
+    settings:
+      ink: "#0b4f5c"
+      plate: "#ff6c2f"
+  - id: red-black
+    name: Red and Black
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/overprint.css");
+      :root {
+        --op-ink: #1d1d1f;
+        --op-plate: #f15060;
+        --op-on-plate: #1d1d1f;
+        --op-backdrop-filter: grayscale(1) contrast(0.7) brightness(1.4);
+        --op-mark-filter: grayscale(1) brightness(0.3);
+      }
+    settings:
+      ink: "#1d1d1f"
+      plate: "#f15060"
+  - id: night
+    name: Night stock
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/overprint.css");
+      :root {
+        --op-paper: #17161c;
+        --op-ink: #ece9e0;
+        --op-plate: #ff48b0;
+        --op-on-plate: #17161c;
+        --op-on-ink: #17161c;
+        --op-danger: #ff6b5e;
+        --op-on-danger: #17161c;
+        --op-color-scheme: dark;
+        --op-grain: 0.4;
+        --op-grain-blend: screen;
+        --op-halftone-blend: screen;
+        --op-halftone-dots: contrast(24) invert(1);
+        --op-halftone-tint-blend: multiply;
+        --op-halftone-base: #000000;
+        --op-logo-filter: brightness(0) invert(0.92);
+        --op-mark-filter: grayscale(1) brightness(2);
+        --op-backdrop-filter: grayscale(1) contrast(1.1) brightness(0.8) sepia(1) hue-rotate(188deg) saturate(3);
+        --op-backdrop-strength: 0.24;
+      }
+    settings:
+      paper: "#17161c"
+      ink: "#ece9e0"
+      grain: 0.4
+      backdrop: 0.24
+groups:
+  - id: inks
+    label: Inks
+  - id: print
+    label: Print
+  - id: type
+    label: Typography
+settings:
+  - id: paper
+    label: Paper
+    description: The page background.
+    type: color
+    group: inks
+    page: home
+    default: "#ebeae3"
+    var: --op-paper
+  - id: ink
+    label: Ink
+    description: Text, rules, outlines and primary buttons.
+    type: color
+    group: inks
+    page: movie
+    default: "#1b2a8c"
+    var: --op-ink
+  - id: plate
+    label: Plate
+    description: The second color, printed off-register behind posters, menus and the current tab.
+    type: color
+    group: inks
+    page: movie
+    default: "#ff48b0"
+    var: --op-plate
+  - id: offset
+    label: Heading misregistration
+    description: How far the plate color sits from the ink in headings. 0 prints them in register.
+    type: number
+    group: print
+    page: movie
+    default: 3
+    min: 0
+    max: 8
+    unit: px
+    var: --op-offset
+  - id: plate-offset
+    label: Poster plate offset
+    description: The color block behind posters, cards and menus.
+    type: number
+    group: print
+    page: movies
+    default: 8
+    min: 0
+    max: 16
+    unit: px
+    var: --op-plate-offset
+  - id: grain
+    label: Grain
+    type: number
+    group: print
+    page: home
+    default: 0.32
+    min: 0
+    max: 0.7
+    step: 0.02
+    var: --op-grain
+  - id: backdrop
+    label: Backdrop strength
+    description: How strongly the one-color backdrop shows through the paper.
+    type: number
+    group: print
+    page: movie
+    default: 0.3
+    min: 0
+    max: 0.6
+    step: 0.02
+    var: --op-backdrop-strength
+  - id: plain-paper
+    label: No halftone
+    description: Drops the halftone dots in the top corner.
+    type: toggle
+    group: print
+    page: home
+    default: false
+    css: |-
+      :root {
+        --op-halftone: 0;
+      }
+  - id: headings
+    label: Headings
+    type: select
+    group: type
+    display: segmented
+    page: movie
+    default: wide
+    options:
+      - value: wide
+        label: Wide
+        description: Archivo in its widest, heaviest cut.
+      - value: condensed
+        label: Condensed
+        description: Tall poster type.
+        css: |-
+          :root {
+            --op-display-stretch: 62%;
+          }
+      - value: mono
+        label: Mono
+        description: Headings in DM Mono.
+        css: |-
+          :root {
+            --op-display-font: var(--op-font-mono);
+            --op-display-stretch: 100%;
+            --op-display-weight: 500;
+          }
