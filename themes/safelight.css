@@ -37,6 +37,8 @@
   --sl-film-muted: #a99383;
   --sl-hole: #3b1a13;
   --sl-edge: #e08a3c;
+  /* drawers and inputs */
+  --sl-panel: var(--sl-film);
   /* fibre paper: the border around the big print on detail pages */
   --sl-print: #f4ede2;
   /* derived */
@@ -45,7 +47,7 @@
   --sl-wash: color-mix(in srgb, var(--sl-safe) 14%, transparent);
   --sl-wash-strong: color-mix(in srgb, var(--sl-safe) 26%, transparent);
   --sl-glass: color-mix(in srgb, var(--sl-room) 86%, transparent);
-  --sl-danger: #ff7a7a;
+  --sl-danger: #ff6f61;
   --sl-on-danger: #1a0606;
   /* light and texture */
   --sl-glow: 0.55;
@@ -121,7 +123,7 @@ html[data-theme] {
   --jf-palette-Button-inheritContainedBg: var(--sl-room-raised);
   --jf-palette-Button-inheritContainedHoverBg: var(--sl-wash-strong);
   --jf-palette-Chip-defaultBorder: var(--sl-line-strong);
-  --jf-palette-FilledInput-bg: var(--sl-film);
+  --jf-palette-FilledInput-bg: var(--sl-panel);
   --jf-palette-FilledInput-hoverBg: var(--sl-room-raised);
   --jf-palette-LinearProgress-primaryBg: var(--sl-line);
   --jf-palette-SnackbarContent-bg: var(--sl-text);
@@ -389,7 +391,11 @@ html .skinHeader.noHeaderRight:not(.skinHeader-withBackground) {
 
 html .pageTitleWithDefaultLogo,
 html .pageTitleWithLogo {
-  filter: var(--sl-logo-filter);
+  filter: var(--sl-mark-filter);
+}
+
+html body .MuiDrawer-paper img {
+  filter: var(--sl-mark-filter);
 }
 
 html h3.pageTitle,
@@ -595,7 +601,7 @@ html body .MuiTabs-indicator {
 /* ------------------------------------------------------------------------ */
 
 html .mainDrawer {
-  background-color: var(--sl-film);
+  background-color: var(--sl-panel);
   border-right: 1px solid var(--sl-line);
 }
 
@@ -794,7 +800,7 @@ html body .MuiIconButton-root {
 html .emby-input,
 html .emby-textarea,
 html .emby-select-withcolor {
-  background: var(--sl-film);
+  background: var(--sl-panel);
   color: var(--sl-text);
   border: 1px solid var(--sl-line-strong);
   border-radius: var(--sl-radius);
@@ -882,7 +888,7 @@ html body .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
 /* 10. Film strips: every horizontal row runs on 35mm stock                  */
 /* ------------------------------------------------------------------------ */
 
-html .emby-scroller {
+html .emby-scroller:has(.card) {
   background-color: color-mix(in srgb, var(--sl-film) calc(var(--sl-strip) * 100%), transparent);
   background-image:
     linear-gradient(90deg, transparent 4px, var(--sl-hole) 4px 13px, transparent 13px),
@@ -891,7 +897,7 @@ html .emby-scroller {
   background-position: 0 7px, 0 calc(100% - 7px);
   background-repeat: repeat-x;
   background-attachment: local;
-  padding-top: calc(var(--sl-strip-pad-top) * var(--sl-strip));
+  padding-top: calc(var(--sl-strip-pad-top) * var(--sl-strip) * 0.45);
   padding-bottom: calc(var(--sl-strip-pad-bottom) * var(--sl-strip));
   margin-bottom: 0.4em;
   box-shadow:
@@ -899,14 +905,10 @@ html .emby-scroller {
     0 -1px 0 color-mix(in srgb, var(--sl-text) calc(var(--sl-strip) * 6%), transparent) inset;
 }
 
-/* no strip: holes go transparent too */
-html .emby-scroller[data-sl-off] {
-  background-image: none;
-}
-
 /* frame numbers, printed on the rebate above each frame */
 html .emby-scroller .itemsContainer {
   counter-reset: sl-frame;
+  padding-top: calc(var(--sl-strip-pad-top) * var(--sl-strip) * 0.55);
 }
 
 html .emby-scroller .itemsContainer > .card {
@@ -960,9 +962,51 @@ html .emby-scroller .cardText-secondary {
   color: var(--sl-film-muted);
 }
 
+/* library grids: a contact sheet, each frame in a sliver of film rebate */
+html .vertical-wrap {
+  counter-reset: sl-frame;
+  padding-top: calc(14px * var(--sl-strip));
+}
+
+html .vertical-wrap > .card {
+  counter-increment: sl-frame;
+}
+
+html .vertical-wrap > .card > .cardBox {
+  position: relative;
+}
+
+html .vertical-wrap > .card > .cardBox:not(.visualCardBox) .cardScalable {
+  box-shadow: 0 0 0 calc(5px * var(--sl-strip)) var(--sl-film);
+}
+
+html .vertical-wrap > .card > .cardBox::after {
+  content: "\25B8\2009" counter(sl-frame);
+  position: absolute;
+  right: 0;
+  top: -1px;
+  transform: translateY(-100%);
+  padding: 1px 4px 2px;
+  opacity: var(--sl-strip);
+  background: var(--sl-film);
+  color: var(--sl-edge);
+  font-family: var(--sl-font-mono);
+  font-stretch: 75%;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  line-height: 1.2;
+  pointer-events: none;
+}
+
 /* ------------------------------------------------------------------------ */
 /* 11. Cards: prints, circled with a grease pencil when picked               */
 /* ------------------------------------------------------------------------ */
+
+/* Jellyfin paint-contains cards; the pencil ring, frame numbers and print
+   border live just outside the poster, so keep layout containment only */
+html .card:not(.show-animation) {
+  contain: layout style;
+}
 
 html .blurhash-canvas,
 html .cardContent,
@@ -1121,9 +1165,15 @@ html .cardOverlayButton-hover {
 }
 
 html .cardOverlayFab-primary {
+  background-color: color-mix(in srgb, var(--sl-film) 72%, transparent) !important;
+  color: var(--sl-safe) !important;
+  border-radius: 50% !important;
+  box-shadow: inset 0 0 0 1.5px var(--sl-safe);
+}
+
+html .cardOverlayFab-primary:hover {
   background-color: var(--sl-safe) !important;
   color: var(--sl-on-safe) !important;
-  border-radius: 50% !important;
 }
 
 html .cardOverlayContainer > .cardOverlayFab-primary:hover {
@@ -1191,7 +1241,7 @@ html body .MuiLinearProgress-root {
 }
 
 html body .MuiLinearProgress-bar {
-  background-color: var(--sl-safe);
+  background-color: var(--sl-safe) !important;
 }
 
 html .emby-scrollbuttons-button {
@@ -1247,8 +1297,8 @@ html .itemName.infoText {
   text-wrap: balance;
 }
 
-html .layout-mobile .itemName,
-html .layout-mobile .itemName.infoText {
+html.layout-mobile .itemName,
+html.layout-mobile .itemName.infoText {
   font-size: 2.2rem;
 }
 
@@ -1350,6 +1400,13 @@ html .itemExternalLinks {
 }
 
 html .itemTags a,
+html .itemExternalLinks a {
+  font-family: var(--sl-font);
+  font-stretch: 100%;
+  font-size: 0.9rem;
+}
+
+html .itemTags a,
 html .itemExternalLinks a,
 html .itemLinks a,
 html .detailsGroupItem a,
@@ -1371,18 +1428,13 @@ html .itemDetailsGroup a:hover {
 }
 
 /* the big poster: a fibre print with a white border, hung a little crooked */
-html .detailImageContainer .card .cardBox {
-  overflow: visible;
-}
-
 html .detailImageContainer .card .cardScalable {
-  background: var(--sl-print);
-  padding: 10px 10px 34px;
   transform: rotate(var(--sl-print-tilt));
   box-shadow:
-    0 2px 0 color-mix(in srgb, var(--sl-print) 50%, var(--sl-room)),
-    0 30px 60px -20px color-mix(in srgb, #000000 80%, transparent),
-    0 0 80px -20px color-mix(in srgb, var(--sl-safe) 45%, transparent) !important;
+    0 0 0 8px var(--sl-print),
+    0 14px 0 8px var(--sl-print),
+    0 40px 70px -10px color-mix(in srgb, #000000 80%, transparent),
+    0 0 90px -10px color-mix(in srgb, var(--sl-safe) 45%, transparent) !important;
   border: 0 !important;
 }
 
@@ -1393,29 +1445,32 @@ html .detailImageContainer .card .cardScalable::before {
 html .detailImageContainer .card .cardScalable::after {
   content: "\25B8\2009 14A";
   position: absolute;
-  left: 12px;
-  bottom: 11px;
-  color: color-mix(in srgb, var(--sl-room) 70%, var(--sl-print));
+  left: 0;
+  bottom: -18px;
+  color: color-mix(in srgb, var(--sl-room) 60%, var(--sl-print));
   font-family: var(--sl-font-mono);
   font-stretch: 75%;
   font-size: 9px;
   letter-spacing: 0.14em;
 }
 
+html.layout-mobile .detailImageContainer .card .cardScalable {
+  transform: rotate(calc(var(--sl-print-tilt) * 0.6));
+  box-shadow:
+    0 0 0 5px var(--sl-print),
+    0 12px 30px -10px color-mix(in srgb, #000000 70%, transparent) !important;
+}
+
+html.layout-mobile .detailImageContainer .card .cardScalable::after {
+  display: none;
+}
+
+html.layout-desktop .detailPageSecondaryContainer {
+  padding-top: 1em;
+}
+
 html .detailImageContainer .cardPadder {
-  background: transparent;
-}
-
-html .detailImageContainer .cardImageContainer,
-html .detailImageContainer .cardContent {
-  border-radius: 0;
-}
-
-html .detailImageContainer .cardScalable > .cardPadder,
-html .detailImageContainer .cardScalable > .cardImageContainer,
-html .detailImageContainer .cardScalable > .cardContent,
-html .detailImageContainer .cardScalable > .blurhash-canvas {
-  position: relative;
+  background: var(--sl-room-raised);
 }
 
 html .emby-collapsible-button {
@@ -1529,7 +1584,7 @@ html .actionSheet {
   box-shadow:
     0 30px 80px -20px color-mix(in srgb, #000000 85%, transparent),
     0 0 40px -10px color-mix(in srgb, var(--sl-safe) 35%, transparent);
-  padding: 8px 18px;
+  padding: 6px 13px;
 }
 
 html .actionSheetContent {
@@ -1540,7 +1595,7 @@ html .actionSheetMenuItem {
   color: var(--sl-film-text);
   border-radius: var(--sl-radius);
   min-height: 2.5em;
-  padding: 0 0.85em;
+  padding: 0 0.55em;
   transition: background-color 120ms ease;
 }
 
@@ -1709,6 +1764,8 @@ html .guide-headerTimeslots {
   font-family: var(--sl-font-mono);
   font-stretch: 80%;
   font-weight: 500;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
 }
 
 html .guide-headerTimeslots {
@@ -1795,7 +1852,7 @@ html #loginPage .cardText {
 /* ------------------------------------------------------------------------ */
 
 html body .MuiDrawer-paper {
-  background-color: var(--sl-film);
+  background-color: var(--sl-panel);
   background-image: none;
   color: var(--sl-text);
   border-right: 1px solid var(--sl-line) !important;
@@ -1840,7 +1897,7 @@ html body main .MuiPaper-rounded:not(.MuiMenu-paper):not(.MuiPopover-paper) {
 html body .MuiCardMedia-root.defaultCardBackground,
 html body main .MuiCard-root .MuiCardMedia-root {
   background-color: var(--sl-film) !important;
-  color: var(--sl-muted);
+  color: var(--sl-film-muted);
 }
 
 html body .MuiCardActions-root {

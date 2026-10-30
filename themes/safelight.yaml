@@ -1,0 +1,188 @@
+# yaml-language-server: $schema=../schema.json
+owners:
+  - darmiel
+name: Safelight
+author: darmiel
+author_url: https://github.com/darmiel
+repo: https://github.com/darmiel/theme.yaml
+description: A darkroom theme where backdrops glow in red monochrome under a safelight, every row of posters runs on a strip of 35mm film with sprocket holes and frame numbers, and the poster you point at gets circled in grease pencil. Posters keep their colors, and the detail page shows the poster as a white-bordered print.
+versions:
+  - "10.11"
+  - "12"
+recommends:
+  backdrops: true
+variants:
+  - id: safelight
+    name: Safelight
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/safelight.css");
+  - id: sodium
+    name: Sodium amber
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/safelight.css");
+      :root {
+        --sl-room: #130e0a;
+        --sl-room-raised: #20170f;
+        --sl-safe: #ffa83d;
+        --sl-on-safe: #1a1006;
+        --sl-hole: #3a2814;
+        --sl-edge: #e9c27c;
+        --sl-backdrop-filter: grayscale(1) contrast(1.15) brightness(0.95) sepia(1) hue-rotate(-6deg) saturate(3.4);
+        --sl-mark-filter: grayscale(1) brightness(1.2) sepia(1) hue-rotate(-8deg) saturate(4);
+      }
+    settings:
+      accent: "#ffa83d"
+  - id: light-table
+    name: Light table
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/safelight.css");
+      :root {
+        --sl-room: #ebe7e0;
+        --sl-room-raised: #f6f3ee;
+        --sl-panel: #f6f3ee;
+        --sl-text: #1b1311;
+        --sl-muted: #5c4e47;
+        --sl-safe: #b42c16;
+        --sl-on-safe: #fff6f0;
+        --sl-hole: #f3ece0;
+        --sl-print: #ffffff;
+        --sl-danger: #a8231a;
+        --sl-on-danger: #ffffff;
+        --sl-glow: 0;
+        --sl-grain: 0.08;
+        --sl-grain-blend: multiply;
+        --sl-backdrop-strength: 0.16;
+        --sl-backdrop-filter: grayscale(1) contrast(0.9) brightness(1.15);
+        --sl-mark-filter: grayscale(1) brightness(0.25);
+        --sl-logo-filter: brightness(0.2);
+        --sl-color-scheme: light;
+      }
+    settings:
+      accent: "#b42c16"
+      glow: 0
+      grain: 0.08
+      backdrop: 0.16
+groups:
+  - id: light
+    label: Light
+  - id: film
+    label: Film
+  - id: type
+    label: Typography
+settings:
+  - id: accent
+    label: Safelight color
+    description: The lamp, buttons, the current tab and the grease pencil.
+    type: color
+    group: light
+    page: movie
+    default: "#ff5a36"
+    css: |-
+      :root {
+        --sl-safe: {{ value }};
+        --sl-on-safe: {{ value | contrast | mix "#1a0d0a" 0.1 }};
+      }
+  - id: glow
+    label: Lamp glow
+    description: How strongly the safelight washes the top corner of the room.
+    type: number
+    group: light
+    page: home
+    default: 0.55
+    min: 0
+    max: 1
+    step: 0.05
+    var: --sl-glow
+  - id: backdrop
+    label: Backdrop strength
+    description: How much of the red backdrop shows through the dark.
+    type: number
+    group: light
+    page: movie
+    default: 0.42
+    min: 0
+    max: 0.8
+    step: 0.02
+    var: --sl-backdrop-strength
+  - id: high-contrast
+    label: High contrast
+    description: Brighter text, dimmer backdrops and a solid header.
+    type: toggle
+    group: light
+    page: movie
+    default: false
+    css: |-
+      :root {
+        --sl-text: #fffaf3;
+        --sl-muted: #e2d3c6;
+        --sl-film-muted: #d6c6b8;
+        --sl-backdrop-strength: 0.2;
+        --sl-glow: 0.3;
+        --sl-grain: 0;
+        --sl-glass: var(--sl-room);
+      }
+  - id: grain
+    label: Grain
+    type: number
+    group: film
+    page: home
+    default: 0.14
+    min: 0
+    max: 0.4
+    step: 0.02
+    var: --sl-grain
+  - id: no-strips
+    label: No film strips
+    description: Drops the sprocket holes, frame numbers and film rebate around rows and grids.
+    type: toggle
+    group: film
+    page: home
+    default: false
+    css: |-
+      :root {
+        --sl-strip: 0;
+        --sl-hole: transparent;
+      }
+  - id: tilt
+    label: Print tilt
+    description: How crooked the big poster hangs on the detail page.
+    type: number
+    group: film
+    page: movie
+    default: -1.2
+    min: -4
+    max: 4
+    step: 0.2
+    unit: deg
+    var: --sl-print-tilt
+  - id: calm
+    label: Calm room
+    description: Stops the lamp from pulsing and posters from developing in. Reduced motion does this on its own.
+    type: toggle
+    group: film
+    page: home
+    default: false
+    css: |-
+      :root {
+        --sl-breathe: 0;
+        --sl-develop: 0;
+      }
+  - id: headings
+    label: Headings
+    type: select
+    group: type
+    display: segmented
+    page: movie
+    default: condensed
+    options:
+      - value: condensed
+        label: Condensed
+        description: Bricolage Grotesque in its narrowest cut.
+      - value: regular
+        label: Regular
+        description: Normal width, a little lighter.
+        css: |-
+          :root {
+            --sl-display-stretch: 100%;
+            --sl-display-weight: 700;
+          }
