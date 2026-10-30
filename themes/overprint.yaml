@@ -5,7 +5,7 @@ name: Overprint
 author: darmiel
 author_url: https://github.com/darmiel
 repo: https://github.com/darmiel/theme.yaml
-description: A risograph-style theme with two inks on off-white paper, grain, a halftone corner and backdrops printed in one color. Posters and dialogs get a second color block printed slightly out of register, headings use wide uppercase type and labels use a monospace font.
+description: A risograph-style theme with two inks on off-white paper, grain, a halftone corner and backdrops printed in one color. Dialogs, menus and hovered posters get a second color block printed slightly out of register, headings use wide uppercase type and labels use a monospace font.
 versions:
   - "10.11"
   - "12"
@@ -165,6 +165,17 @@ settings:
     max: 16
     unit: px
     var: --op-plate-offset
+  - id: plates-at-rest
+    label: Plates behind every poster
+    description: Prints the plate block behind posters in libraries and on the home screen all the time, not only on hover.
+    type: toggle
+    group: print
+    page: movies
+    default: false
+    css: |-
+      :root {
+        --op-card-rest: var(--op-plate-offset) var(--op-plate-offset) 0 var(--op-plate);
+      }
   - id: grain
     label: Grain
     type: number
