@@ -1087,11 +1087,16 @@ html body .MuiChip-root {
 }
 
 html .mediaInfoText,
-html .mediaInfoOfficialRating,
-html .mediaInfoCriticRating {
+html .mediaInfoOfficialRating {
   border: 1.5px solid var(--op-ink);
   border-radius: 0;
   background: transparent;
+  color: var(--op-ink);
+  font-family: var(--op-font-mono);
+}
+
+/* its tomato is a background image, so no pill and no background here */
+html .mediaInfoCriticRating {
   color: var(--op-ink);
   font-family: var(--op-font-mono);
 }

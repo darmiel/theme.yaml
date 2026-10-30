@@ -955,8 +955,7 @@ html body .MuiChip-label {
 }
 
 html .mediaInfoText,
-html .mediaInfoOfficialRating,
-html .mediaInfoCriticRating {
+html .mediaInfoOfficialRating {
   background: transparent;
   color: var(--gh-fg-muted);
   border: 1px solid var(--gh-border);

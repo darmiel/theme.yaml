@@ -1210,11 +1210,17 @@ html body .MuiChip-root {
 }
 
 html .mediaInfoText,
-html .mediaInfoOfficialRating,
-html .mediaInfoCriticRating {
+html .mediaInfoOfficialRating {
   border: 1px solid var(--sl-line-strong);
   border-radius: var(--sl-radius);
   background: transparent;
+  color: var(--sl-text);
+  font-family: var(--sl-font-mono);
+  font-stretch: 80%;
+}
+
+/* its tomato is a background image, so no pill and no background here */
+html .mediaInfoCriticRating {
   color: var(--sl-text);
   font-family: var(--sl-font-mono);
   font-stretch: 80%;
