@@ -1,0 +1,266 @@
+# yaml-language-server: $schema=../schema.json
+owners:
+  - darmiel
+name: GitHub
+author: darmiel
+author_url: https://github.com/darmiel
+repo: https://github.com/darmiel/theme.yaml
+description: Makes Jellyfin look like GitHub, with Primer colors, the system font stack, bordered boxes, green primary buttons and underlined tabs. Comes in Dark, Light, Dark dimmed and Dark high contrast.
+versions:
+  - "10.10"
+  - "10.11"
+  - "12"
+variants:
+  - id: dark
+    name: Dark
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/jellyfin-github.css");
+  - id: light
+    name: Light
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/jellyfin-github.css");
+      :root {
+        --gh-color-scheme: light;
+        --gh-logo-filter: invert(1) hue-rotate(180deg);
+        --gh-canvas: #ffffff;
+        --gh-canvas-channel: 255 255 255;
+        --gh-canvas-subtle: #f6f8fa;
+        --gh-overlay: #ffffff;
+        --gh-border: #d0d7de;
+        --gh-border-muted: #d8dee4;
+        --gh-fg: #1f2328;
+        --gh-fg-channel: 31 35 40;
+        --gh-fg-muted: #656d76;
+        --gh-fg-subtle: #6e7781;
+        --gh-accent: #0969da;
+        --gh-accent-channel: 9 105 218;
+        --gh-accent-fg: #0969da;
+        --gh-success: #1f883d;
+        --gh-success-fg: #1a7f37;
+        --gh-attention-fg: #9a6700;
+        --gh-danger: #cf222e;
+        --gh-danger-fg: #d1242f;
+        --gh-neutral-muted: rgb(175 184 193 / 0.2);
+        --gh-neutral-subtle: rgb(234 238 242 / 0.5);
+        --gh-hover: rgb(208 215 222 / 0.32);
+        --gh-btn-bg: #f6f8fa;
+        --gh-btn-hover-bg: #f3f4f6;
+        --gh-btn-border: rgb(31 35 40 / 0.15);
+        --gh-btn-hover-border: rgb(31 35 40 / 0.15);
+        --gh-btn-primary-bg: #1f883d;
+        --gh-btn-primary-hover-bg: #1a7f37;
+        --gh-header-bg: #f6f8fa;
+        --gh-header-fg: #1f2328;
+        --gh-header-border: #d0d7de;
+        --gh-underline: #fd8c73;
+        --gh-shadow-overlay: 0 1px 3px rgb(31 35 40 / 0.12), 0 8px 24px rgb(66 74 83 / 0.12);
+        --gh-shadow-small: 0 1px 0 rgb(31 35 40 / 0.04);
+      }
+    settings:
+      underline: "#fd8c73"
+      primary: "#1f883d"
+  - id: dimmed
+    name: Dark dimmed
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/jellyfin-github.css");
+      :root {
+        --gh-canvas: #22272e;
+        --gh-canvas-channel: 34 39 46;
+        --gh-canvas-subtle: #2d333b;
+        --gh-overlay: #2d333b;
+        --gh-border: #444c56;
+        --gh-border-muted: #373e47;
+        --gh-fg: #adbac7;
+        --gh-fg-channel: 173 186 199;
+        --gh-fg-muted: #768390;
+        --gh-fg-subtle: #636e7b;
+        --gh-fg-on-emphasis: #cdd9e5;
+        --gh-accent: #316dca;
+        --gh-accent-channel: 49 109 202;
+        --gh-accent-fg: #539bf5;
+        --gh-success: #347d39;
+        --gh-success-fg: #57ab5a;
+        --gh-attention-fg: #c69026;
+        --gh-danger: #c93c37;
+        --gh-danger-fg: #e5534b;
+        --gh-neutral-muted: rgb(99 110 123 / 0.4);
+        --gh-neutral-subtle: rgb(99 110 123 / 0.1);
+        --gh-hover: rgb(144 157 171 / 0.12);
+        --gh-btn-bg: #373e47;
+        --gh-btn-hover-bg: #444c56;
+        --gh-btn-border: rgb(205 217 229 / 0.1);
+        --gh-btn-hover-border: #768390;
+        --gh-btn-primary-bg: #347d39;
+        --gh-btn-primary-hover-bg: #46954a;
+        --gh-btn-primary-fg: #ffffff;
+        --gh-header-bg: #1c2128;
+        --gh-header-fg: #adbac7;
+        --gh-header-border: #444c56;
+        --gh-underline: #ec775c;
+        --gh-shadow-overlay: 0 0 0 1px #444c56, 0 16px 32px rgb(28 33 40 / 0.85);
+      }
+    settings:
+      accent: "#316dca"
+      underline: "#ec775c"
+      primary: "#347d39"
+  - id: high-contrast
+    name: Dark high contrast
+    css: |-
+      @import url("https://cdn.jsdelivr.net/gh/darmiel/theme.yaml@main/themes/jellyfin-github.css");
+      :root {
+        --gh-canvas: #0a0c10;
+        --gh-canvas-channel: 10 12 16;
+        --gh-canvas-subtle: #272b33;
+        --gh-overlay: #272b33;
+        --gh-border: #7a828e;
+        --gh-border-muted: #7a828e;
+        --gh-fg: #f0f3f6;
+        --gh-fg-channel: 240 243 246;
+        --gh-fg-muted: #d9dee3;
+        --gh-fg-subtle: #9ea7b3;
+        --gh-fg-on-emphasis: #0a0c10;
+        --gh-accent: #409eff;
+        --gh-accent-channel: 64 158 255;
+        --gh-accent-fg: #71b7ff;
+        --gh-success: #09b43a;
+        --gh-success-fg: #26cd4d;
+        --gh-attention-fg: #f0b72f;
+        --gh-danger: #ff6a69;
+        --gh-danger-fg: #ff9492;
+        --gh-neutral-muted: rgb(158 167 179 / 0.4);
+        --gh-neutral-subtle: rgb(158 167 179 / 0.1);
+        --gh-hover: rgb(158 167 179 / 0.2);
+        --gh-btn-bg: #272b33;
+        --gh-btn-hover-bg: #525964;
+        --gh-btn-border: #7a828e;
+        --gh-btn-hover-border: #bdc4cc;
+        --gh-btn-primary-bg: #09b43a;
+        --gh-btn-primary-hover-bg: #26cd4d;
+        --gh-btn-primary-fg: #0a0c10;
+        --gh-header-bg: #010409;
+        --gh-header-fg: #f0f3f6;
+        --gh-header-border: #7a828e;
+        --gh-underline: #ff967d;
+        --gh-shadow-overlay: 0 0 0 1px #7a828e, 0 16px 32px rgb(1 4 9 / 0.85);
+      }
+    settings:
+      accent: "#409eff"
+      underline: "#ff967d"
+      primary: "#09b43a"
+groups:
+  - id: colors
+    label: Colors
+  - id: shape
+    label: Shape
+  - id: type
+    label: Typography
+settings:
+  - id: accent
+    label: Accent
+    description: Links, focus rings, selection and progress bars.
+    type: color
+    group: colors
+    page: movie
+    default: "#2f81f7"
+    variants:
+      - dark
+      - dimmed
+      - high-contrast
+    css: |-
+      :root {
+        --gh-accent: {{ value }};
+        --gh-accent-channel: {{ value | r }} {{ value | g }} {{ value | b }};
+        --gh-accent-fg: {{ value | mix "#ffffff" 0.25 }};
+      }
+  - id: accent-light
+    label: Accent
+    description: Links, focus rings, selection and progress bars.
+    type: color
+    group: colors
+    page: movie
+    default: "#0969da"
+    variants:
+      - light
+    css: |-
+      :root {
+        --gh-accent: {{ value }};
+        --gh-accent-channel: {{ value | r }} {{ value | g }} {{ value | b }};
+        --gh-accent-fg: {{ value }};
+      }
+  - id: primary
+    label: Primary buttons
+    description: Play, sign in and other main actions. GitHub uses green.
+    type: color
+    group: colors
+    page: movie
+    default: "#238636"
+    css: |-
+      :root {
+        --gh-btn-primary-bg: {{ value }};
+        --gh-btn-primary-hover-bg: {{ value | mix "#ffffff" 0.1 }};
+        --gh-btn-primary-fg: {{ value | contrast }};
+      }
+  - id: underline
+    label: Active tab underline
+    type: color
+    group: colors
+    page: movies
+    default: "#f78166"
+    var: --gh-underline
+  - id: radius
+    label: Control radius
+    description: Buttons, inputs and menu items.
+    type: number
+    group: shape
+    page: movie
+    default: 6
+    min: 0
+    max: 16
+    unit: px
+    var: --gh-radius
+  - id: radius-lg
+    label: Box radius
+    description: Posters, cards, dialogs and menus.
+    type: number
+    group: shape
+    page: movies
+    default: 12
+    min: 0
+    max: 24
+    unit: px
+    var: --gh-radius-lg
+  - id: borderless
+    label: Borderless posters
+    description: Drops the 1px outline around posters and cards.
+    type: toggle
+    group: shape
+    page: movies
+    default: false
+    css: |-
+      :root {
+        --gh-card-border-width: 0px;
+      }
+  - id: font
+    label: Font
+    type: select
+    group: type
+    display: segmented
+    page: home
+    default: system
+    options:
+      - value: system
+        label: System
+        description: GitHub's system font stack.
+      - value: mono-headings
+        label: Mono headings
+        css: |-
+          :root {
+            --gh-font-heading: var(--gh-font-mono);
+          }
+      - value: mono
+        label: Mono
+        css: |-
+          :root {
+            --gh-font: var(--gh-font-mono);
+            --gh-font-heading: var(--gh-font-mono);
+          }

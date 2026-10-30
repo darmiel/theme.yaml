@@ -4,11 +4,14 @@
  * https://github.com/darmiel/theme.yaml
  *
  * Works on Jellyfin 10.10, 10.11 and 12.x (legacy header and the new MUI app
- * bar / dashboard). Everything below reads the --gh-* tokens; this file ships
- * the Dark tokens as defaults. Other editions (Light, Dark dimmed, Dark high
+ * bar / dashboard). Everything below reads the --gh-* tokens; html this file ships
+ * the Dark tokens as defaults. Other editions (Light,
+html Dark dimmed,
+html Dark high
  * contrast) only override the tokens in a :root block after the @import.
  *
- * MIT License, (c) darmiel
+ * MIT License,
+html (c) darmiel
  */
 
 /* ------------------------------------------------------------------------ */
@@ -20,7 +23,6 @@
   --gh-canvas: #0d1117;
   --gh-canvas-channel: 13 17 23;
   --gh-canvas-subtle: #161b22;
-  --gh-canvas-inset: #010409;
   --gh-overlay: #161b22;
   /* borders */
   --gh-border: #30363d;
@@ -41,7 +43,6 @@
   --gh-attention-fg: #d29922;
   --gh-danger: #da3633;
   --gh-danger-fg: #f85149;
-  --gh-done-fg: #a371f7;
   /* neutral fills */
   --gh-neutral-muted: rgb(110 118 129 / 0.4);
   --gh-neutral-subtle: rgb(110 118 129 / 0.1);
@@ -65,6 +66,9 @@
   --gh-card-border-width: 1px;
   --gh-shadow-overlay: 0 0 0 1px var(--gh-border), 0 16px 32px rgb(1 4 9 / 0.85);
   --gh-shadow-small: 0 0 transparent;
+  --gh-color-scheme: dark;
+  /* the legacy header logo is white text; light editions flip it */
+  --gh-logo-filter: none;
   /* type */
   --gh-font: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   --gh-font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
@@ -78,7 +82,7 @@
 
 html:root,
 html[data-theme] {
-  color-scheme: dark;
+  color-scheme: var(--gh-color-scheme);
   --jf-shape-borderRadius: var(--gh-radius);
   --jf-card-borderRadius: var(--gh-radius-lg);
   --jf-palette-primary-main: var(--gh-accent);
@@ -168,113 +172,113 @@ html[data-theme] {
 /* 3. Base                                                                   */
 /* ------------------------------------------------------------------------ */
 
-html,
+html:root,
 html[lang] {
   font-family: var(--gh-font);
   color: var(--gh-fg);
   background-color: var(--gh-canvas);
 }
 
-body,
-.skinHeader,
-.backgroundContainer,
-.nowPlayingPlaylist,
-.nowPlayingContextMenu,
-.ui-corner-all,
-.ui-shadow,
-.wizardStartForm {
+html body,
+html .skinHeader,
+html .backgroundContainer,
+html .nowPlayingPlaylist,
+html .nowPlayingContextMenu,
+html .ui-corner-all,
+html .ui-shadow,
+html .wizardStartForm {
   color: var(--gh-fg);
 }
 
-html,
-.backgroundContainer,
-.nowPlayingPlaylist,
-.ui-corner-all,
-.ui-shadow,
-.wizardStartForm,
-.mainDrawer,
-.drawer-open,
-.noBackdropTransparency .detailPageWrapperContainer,
-.noBackdropTransparency .detailPagePrimaryContainer,
-.noBackdropTransparency .detailPageSecondaryContainer {
+html:root,
+html .backgroundContainer,
+html .nowPlayingPlaylist,
+html .ui-corner-all,
+html .ui-shadow,
+html .wizardStartForm,
+html .mainDrawer,
+html .drawer-open,
+html .noBackdropTransparency .detailPageWrapperContainer,
+html .noBackdropTransparency .detailPagePrimaryContainer,
+html .noBackdropTransparency .detailPageSecondaryContainer {
   background-color: var(--gh-canvas);
   background-image: none;
 }
 
-.backgroundContainer.withBackdrop {
+html .backgroundContainer.withBackdrop {
   background-color: rgb(var(--gh-canvas-channel) / 0.88);
   opacity: 1;
 }
 
 /* MUI hard-codes Noto Sans in its generated classes */
 html body [class*="Mui"]:not(.material-icons),
-.emby-button,
-button,
-input,
-select,
-textarea {
+html .emby-button,
+html button,
+html input,
+html select,
+html textarea {
   font-family: var(--gh-font);
 }
 
-h1,
-h2,
-h3,
-.sectionTitle,
-.itemName,
-.pageTitle,
-.MuiTypography-h1,
-.MuiTypography-h2,
-.MuiTypography-h3,
-.MuiTypography-h4,
-.MuiTypography-h5,
-.MuiTypography-h6 {
+html h1,
+html h2,
+html h3,
+html .sectionTitle,
+html .itemName,
+html .pageTitle,
+html .MuiTypography-h1,
+html .MuiTypography-h2,
+html .MuiTypography-h3,
+html .MuiTypography-h4,
+html .MuiTypography-h5,
+html .MuiTypography-h6 {
   font-family: var(--gh-font-heading) !important;
 }
 
-a {
+html a {
   color: var(--gh-accent-fg);
 }
 
-::selection {
+html ::selection {
   background-color: rgb(var(--gh-accent-channel) / 0.4);
 }
 
-code,
-pre,
-kbd,
-.textarea-mono {
+html code,
+html pre,
+html kbd,
+html .textarea-mono {
   font-family: var(--gh-font-mono) !important;
 }
 
-* {
+html * {
   scrollbar-color: var(--gh-border) transparent;
 }
 
-::-webkit-scrollbar-track {
+html ::-webkit-scrollbar-track {
   box-shadow: none;
 }
 
-::-webkit-scrollbar-track-piece {
+html ::-webkit-scrollbar-track-piece {
   background-color: transparent;
 }
 
-::-webkit-scrollbar-thumb:horizontal,
-::-webkit-scrollbar-thumb:vertical {
+html ::-webkit-scrollbar-thumb:horizontal,
+html ::-webkit-scrollbar-thumb:vertical {
   background: var(--gh-border);
   border-radius: 6px;
 }
 
 /* Focus: Primer's 2px accent ring */
-:focus-visible,
-.emby-button.show-focus:focus,
-.paper-icon-button-light.show-focus:focus,
-.emby-tab-button.show-focus:focus {
+html :focus-visible,
+html .emby-button.show-focus:focus,
+html .paper-icon-button-light.show-focus:focus,
+html .emby-tab-button.show-focus:focus {
   outline: 2px solid var(--gh-accent) !important;
   outline-offset: -2px;
   box-shadow: none;
 }
 
-.emby-button.show-focus:focus {
+html .emby-button.show-focus:focus {
   background: var(--gh-btn-bg);
   color: var(--gh-fg);
 }
@@ -284,9 +288,9 @@ kbd,
 /* ------------------------------------------------------------------------ */
 
 /* legacy header (10.10 / 10.11, and the mobile drawer header) */
-.skinHeader-withBackground,
-.skinHeader.semiTransparent,
-.skinHeader-blurred {
+html .skinHeader-withBackground,
+html .skinHeader.semiTransparent,
+html .skinHeader-blurred {
   background-color: var(--gh-header-bg) !important;
   background-image: none !important;
   -webkit-backdrop-filter: none !important;
@@ -295,22 +299,26 @@ kbd,
   color: var(--gh-header-fg);
 }
 
-.skinHeader.semiTransparent {
+html .skinHeader.semiTransparent {
   background-color: rgb(var(--gh-canvas-channel) / 0.75) !important;
 }
 
-.pageTitle {
+html .pageTitleWithDefaultLogo {
+  filter: var(--gh-logo-filter);
+}
+
+html .pageTitle {
   color: var(--gh-header-fg);
   font-weight: 600;
   font-size: 1.05em;
 }
 
-.headerButton {
+html .headerButton {
   color: var(--gh-header-fg);
 }
 
-.headerRight .headerButton,
-.headerLeft .headerButton {
+html .headerRight .headerButton,
+html .headerLeft .headerButton {
   border-radius: var(--gh-radius);
 }
 
@@ -370,7 +378,7 @@ html body .MuiAppBar-root .MuiButton-colorPrimary::after {
 
 /* bordered icon buttons, as in GitHub's header */
 html body .MuiAppBar-root .MuiIconButton-root,
-.headerRight .headerButton {
+html .headerRight .headerButton {
   border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius);
   color: var(--gh-fg-muted);
@@ -380,7 +388,7 @@ html body .MuiAppBar-root .MuiIconButton-root,
 }
 
 html body .MuiAppBar-root .MuiIconButton-root:hover,
-.headerRight .headerButton:hover {
+html .headerRight .headerButton:hover {
   background-color: var(--gh-hover);
   color: var(--gh-fg);
 }
@@ -390,9 +398,17 @@ html body .MuiAppBar-root .MuiIconButton-root .MuiSvgIcon-root {
 }
 
 html body .MuiAppBar-root .MuiIconButton-root:has(.MuiAvatar-root),
-.headerRight .headerUserButton {
+html .headerRight .headerUserButton {
   border-radius: 50%;
   padding: 2px;
+}
+
+html .headerRight .headerButton {
+  padding: 0.3em;
+}
+
+html .headerRight .headerButton .material-icons {
+  font-size: 1.25em;
 }
 
 html body .MuiAvatar-root.MuiAvatar-colorDefault {
@@ -415,11 +431,11 @@ html body .MuiAppBar-root .MuiToolbar-root + .MuiToolbar-root .MuiButton-sizeLar
 /* 5. Tabs (Primer UnderlineNav)                                             */
 /* ------------------------------------------------------------------------ */
 
-.headerTabs {
+html .headerTabs {
   border-top: 1px solid var(--gh-border-muted);
 }
 
-.emby-tab-button {
+html .emby-tab-button {
   color: var(--gh-fg-muted);
   font-weight: 400;
   font-size: 0.875rem;
@@ -429,18 +445,18 @@ html body .MuiAppBar-root .MuiToolbar-root + .MuiToolbar-root .MuiButton-sizeLar
   position: relative;
 }
 
-.emby-tab-button:hover {
+html .emby-tab-button:hover {
   color: var(--gh-fg);
   background-color: var(--gh-hover);
 }
 
-.emby-tab-button-active,
-.emby-tab-button-active:hover {
+html .emby-tab-button-active,
+html .emby-tab-button-active:hover {
   color: var(--gh-fg);
   font-weight: 600;
 }
 
-.emby-tab-button-active::after {
+html .emby-tab-button-active::after {
   content: "";
   position: absolute;
   left: 8px;
@@ -451,12 +467,12 @@ html body .MuiAppBar-root .MuiToolbar-root + .MuiToolbar-root .MuiButton-sizeLar
   background: var(--gh-underline);
 }
 
-.guide-date-tab-button {
+html .guide-date-tab-button {
   color: var(--gh-fg-muted);
 }
 
-.guide-date-tab-button.emby-tab-button-active,
-.guide-date-tab-button:focus {
+html .guide-date-tab-button.emby-tab-button-active,
+html .guide-date-tab-button:focus {
   color: var(--gh-fg);
 }
 
@@ -481,28 +497,28 @@ html body .MuiTabs-indicator {
 /* 6. Side drawer / navigation                                               */
 /* ------------------------------------------------------------------------ */
 
-.mainDrawer {
+html .mainDrawer {
   border-right: 1px solid var(--gh-border);
 }
 
-.navMenuOption {
+html .navMenuOption {
   color: var(--gh-fg);
   border-radius: var(--gh-radius);
   margin: 1px 8px;
 }
 
-.navMenuOption:hover {
+html .navMenuOption:hover {
   background: var(--gh-hover);
 }
 
-.navMenuOption-selected {
+html .navMenuOption-selected {
   background: var(--gh-neutral-muted) !important;
   color: var(--gh-fg) !important;
   font-weight: 600;
   position: relative;
 }
 
-.navMenuOption-selected::before {
+html .navMenuOption-selected::before {
   content: "";
   position: absolute;
   left: -8px;
@@ -513,12 +529,12 @@ html body .MuiTabs-indicator {
   background: var(--gh-accent);
 }
 
-.navMenuOptionIcon,
-.sidebarHeader {
+html .navMenuOptionIcon,
+html .sidebarHeader {
   color: var(--gh-fg-muted);
 }
 
-.sidebarHeader {
+html .sidebarHeader {
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -528,10 +544,10 @@ html body .MuiTabs-indicator {
 /* ------------------------------------------------------------------------ */
 
 /* default button */
-.raised,
-.fab,
-a[data-role="button"],
-.emby-button.raised {
+html .raised,
+html .fab,
+html a[data-role="button"],
+html .emby-button.raised {
   background: var(--gh-btn-bg);
   color: var(--gh-fg);
   border: 1px solid var(--gh-btn-border);
@@ -541,93 +557,93 @@ a[data-role="button"],
   font-size: 0.875rem;
 }
 
-.raised:hover,
-.fab:hover,
-a[data-role="button"]:hover {
+html .raised:hover,
+html .fab:hover,
+html a[data-role="button"]:hover {
   background: var(--gh-btn-hover-bg);
   border-color: var(--gh-btn-hover-border);
 }
 
-.raised:focus,
-.fab:focus,
-a[data-role="button"]:focus {
+html .raised:focus,
+html .fab:focus,
+html a[data-role="button"]:focus {
   background: var(--gh-btn-bg);
 }
 
-.fab {
+html .fab {
   border-radius: 50%;
 }
 
 /* primary button (green) */
-.button-submit,
-.emby-button.button-submit,
-.raised.button-submit {
+html .button-submit,
+html .emby-button.button-submit,
+html .raised.button-submit {
   background: var(--gh-btn-primary-bg);
   color: var(--gh-btn-primary-fg);
   border: 1px solid rgb(var(--gh-fg-channel) / 0.1);
   font-weight: 600;
 }
 
-.button-submit:hover,
-.button-submit:focus,
-.raised.button-submit:hover,
-.raised.button-submit:focus {
+html .button-submit:hover,
+html .button-submit:focus,
+html .raised.button-submit:hover,
+html .raised.button-submit:focus {
   background: var(--gh-btn-primary-hover-bg);
   color: var(--gh-btn-primary-fg);
   border-color: rgb(var(--gh-fg-channel) / 0.1);
 }
 
 /* danger button */
-.button-delete,
-.raised.button-delete {
+html .button-delete,
+html .raised.button-delete {
   background: var(--gh-btn-bg);
   color: var(--gh-danger-fg);
   border: 1px solid var(--gh-btn-border);
 }
 
-.button-delete:hover,
-.raised.button-delete:hover {
+html .button-delete:hover,
+html .raised.button-delete:hover {
   background: var(--gh-danger);
   color: var(--gh-fg-on-emphasis);
   border-color: var(--gh-danger);
 }
 
 /* link-style buttons */
-.button-link,
-.button-flat:hover {
+html .button-link,
+html .button-flat:hover {
   color: var(--gh-accent-fg);
 }
 
-.button-link:hover {
+html .button-link:hover {
   text-decoration: underline;
 }
 
 /* icon buttons */
-.paper-icon-button-light {
+html .paper-icon-button-light {
   border-radius: var(--gh-radius);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .paper-icon-button-light:hover:not(:disabled) {
+  html .paper-icon-button-light:hover:not(:disabled) {
     background-color: var(--gh-hover);
     color: var(--gh-fg);
   }
 }
 
-.paper-icon-button-light:active:not(:disabled) {
+html .paper-icon-button-light:active:not(:disabled) {
   background-color: var(--gh-neutral-muted);
   color: var(--gh-fg);
 }
 
-.buttonActive {
+html .buttonActive {
   color: var(--gh-accent-fg) !important;
 }
 
-.playstatebutton-icon-played {
+html .playstatebutton-icon-played {
   color: var(--gh-success-fg) !important;
 }
 
-.ratingbutton-icon-withrating {
+html .ratingbutton-icon-withrating {
   color: var(--gh-danger-fg) !important;
 }
 
@@ -694,66 +710,66 @@ html body .MuiIconButton-root {
 /* 8. Forms                                                                  */
 /* ------------------------------------------------------------------------ */
 
-.emby-input,
-.emby-textarea,
-.emby-select-withcolor {
+html .emby-input,
+html .emby-textarea,
+html .emby-select-withcolor {
   background: var(--gh-canvas);
   color: var(--gh-fg);
   border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius);
 }
 
-.emby-input:focus,
-.emby-textarea:focus,
-.emby-select-withcolor:focus {
+html .emby-input:focus,
+html .emby-textarea:focus,
+html .emby-select-withcolor:focus {
   border-color: var(--gh-accent) !important;
   box-shadow: inset 0 0 0 1px var(--gh-accent);
   outline: none !important;
 }
 
-.emby-select-withcolor > option {
+html .emby-select-withcolor > option {
   background: var(--gh-overlay);
   color: var(--gh-fg);
 }
 
-.inputLabel,
-.inputLabelUnfocused,
-.selectLabel,
-.textareaLabelUnfocused,
-.checkboxListLabel,
-.paperListLabel {
+html .inputLabel,
+html .inputLabelUnfocused,
+html .selectLabel,
+html .textareaLabelUnfocused,
+html .checkboxListLabel,
+html .paperListLabel {
   color: var(--gh-fg);
   font-weight: 600;
 }
 
-.inputLabelFocused,
-.selectLabelFocused,
-.textareaLabelFocused {
+html .inputLabelFocused,
+html .selectLabelFocused,
+html .textareaLabelFocused {
   color: var(--gh-fg);
 }
 
-.fieldDescription {
+html .fieldDescription {
   color: var(--gh-fg-muted);
 }
 
-.checkboxOutline {
+html .checkboxOutline {
   border-color: var(--gh-border) !important;
   border-width: 1px;
   border-radius: 4px;
   background: var(--gh-canvas);
 }
 
-.emby-checkbox:checked + span + .checkboxOutline {
+html .emby-checkbox:checked + span + .checkboxOutline {
   background-color: var(--gh-accent);
   border-color: var(--gh-accent) !important;
 }
 
-.emby-checkbox:focus + span + .checkboxOutline {
+html .emby-checkbox:focus + span + .checkboxOutline {
   outline: 2px solid var(--gh-accent);
   outline-offset: 1px;
 }
 
-.checkboxIcon-checked {
+html .checkboxIcon-checked {
   color: var(--gh-fg-on-emphasis);
 }
 
@@ -780,144 +796,144 @@ html body .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track {
 /* 9. Cards, posters, section titles                                         */
 /* ------------------------------------------------------------------------ */
 
-.sectionTitle,
-.sectionTitle-cards,
-.sectionTitleTextButton > h2,
-.sectionTitleTextButton > h3 {
+html .sectionTitle,
+html .sectionTitle-cards,
+html .sectionTitleTextButton > h2,
+html .sectionTitleTextButton > h3 {
   color: var(--gh-fg);
   font-weight: 600;
 }
 
-.sectionTitleTextButton,
-.sectionTitleTextButton:hover {
+html .sectionTitleTextButton,
+html .sectionTitleTextButton:hover {
   color: var(--gh-fg) !important;
 }
 
-.sectionTitleTextButton > .material-icons {
+html .sectionTitleTextButton > .material-icons {
   color: var(--gh-fg-muted);
 }
 
-.blurhash-canvas,
-.cardContent,
-.cardImageContainer,
-.cardOverlayContainer,
-.cardPadder,
-.cardScalable,
-.visualCardBox,
-.itemDetailImage,
-.listItemImage {
+html .blurhash-canvas,
+html .cardContent,
+html .cardImageContainer,
+html .cardOverlayContainer,
+html .cardPadder,
+html .cardScalable,
+html .visualCardBox,
+html .itemDetailImage,
+html .listItemImage {
   border-radius: var(--gh-radius-lg);
 }
 
-.cardBox:not(.visualCardBox) .cardScalable {
+html .cardBox:not(.visualCardBox) .cardScalable {
   box-shadow: 0 0 0 var(--gh-card-border-width) var(--gh-border);
   transition: box-shadow 0.15s ease;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .card:hover .cardBox:not(.visualCardBox) .cardScalable {
+  html .card:hover .cardBox:not(.visualCardBox) .cardScalable {
     box-shadow: 0 0 0 1px var(--gh-fg-subtle);
   }
 }
 
-.card:focus .cardBox.visualCardBox,
-.card:focus .cardBox:not(.visualCardBox) .cardScalable,
-.card.show-focus:not(.show-animation) .cardBox.visualCardBox,
-.card.show-focus:not(.show-animation) .cardBox:not(.visualCardBox) .cardScalable {
+html .card:focus .cardBox.visualCardBox,
+html .card:focus .cardBox:not(.visualCardBox) .cardScalable,
+html .card.show-focus:not(.show-animation) .cardBox.visualCardBox,
+html .card.show-focus:not(.show-animation) .cardBox:not(.visualCardBox) .cardScalable {
   border-color: transparent !important;
   border-radius: var(--gh-radius-lg) !important;
   box-shadow: 0 0 0 2px var(--gh-accent) !important;
 }
 
-.visualCardBox,
-.cardBox:not(.visualCardBox) .cardPadder,
-.paperList {
+html .visualCardBox,
+html .cardBox:not(.visualCardBox) .cardPadder,
+html .paperList {
   background-color: var(--gh-canvas-subtle);
 }
 
-.visualCardBox {
+html .visualCardBox {
   border: var(--gh-card-border-width) solid var(--gh-border);
 }
 
-.cardPadder .cardImageIcon,
-.cardImageIcon {
+html .cardPadder .cardImageIcon,
+html .cardImageIcon {
   color: var(--gh-fg-subtle);
 }
 
 /* placeholder backgrounds (no image) */
-.defaultCardBackground,
-.defaultCardBackground1,
-.defaultCardBackground2,
-.defaultCardBackground3,
-.defaultCardBackground4,
-.defaultCardBackground5 {
+html .defaultCardBackground,
+html .defaultCardBackground1,
+html .defaultCardBackground2,
+html .defaultCardBackground3,
+html .defaultCardBackground4,
+html .defaultCardBackground5 {
   background-color: var(--gh-canvas-subtle) !important;
   background-image: linear-gradient(135deg, rgb(var(--gh-accent-channel) / 0.08), transparent 60%);
   color: var(--gh-fg-muted);
 }
 
-.defaultCardBackground .cardImageIcon,
-.defaultCardBackground .material-icons {
+html .defaultCardBackground .cardImageIcon,
+html .defaultCardBackground .material-icons {
   color: var(--gh-fg-subtle);
 }
 
-.cardText {
+html .cardText {
   color: var(--gh-fg);
 }
 
-.cardText-first,
-.cardText-first a,
-.cardText-first bdi {
+html .cardText-first,
+html .cardText-first a,
+html .cardText-first bdi {
   font-weight: 600;
 }
 
-.cardText-first .textActionButton:hover,
-.cardText a:hover {
+html .cardText-first .textActionButton:hover,
+html .cardText a:hover {
   color: var(--gh-accent-fg);
   text-decoration: underline;
 }
 
-.cardText-secondary,
-.secondaryText,
-.listItem .secondary,
-.nowPlayingBarSecondaryText,
-.programSecondaryTitle,
-.guide-programNameCaret {
+html .cardText-secondary,
+html .secondaryText,
+html .listItem .secondary,
+html .nowPlayingBarSecondaryText,
+html .programSecondaryTitle,
+html .guide-programNameCaret {
   color: var(--gh-fg-muted);
 }
 
-.cardFooter-vibrant .cardText-secondary {
+html .cardFooter-vibrant .cardText-secondary {
   opacity: 0.75;
 }
 
-.cardOverlayContainer {
+html .cardOverlayContainer {
   background: rgb(1 4 9 / 0.55);
 }
 
-.cardOverlayButton,
-.cardOverlayButton-hover {
+html .cardOverlayButton,
+html .cardOverlayButton-hover {
   color: #ffffff;
 }
 
 /* small badges: Primer Counter / Label */
-.countIndicator,
-.fullSyncIndicator,
-.mediaSourceIndicator,
-.playedIndicator {
+html .countIndicator,
+html .fullSyncIndicator,
+html .mediaSourceIndicator,
+html .playedIndicator {
   background: var(--gh-accent);
   color: var(--gh-fg-on-emphasis);
   box-shadow: 0 0 0 1px rgb(1 4 9 / 0.35);
   font-weight: 600;
 }
 
-.countIndicator > svg,
-.fullSyncIndicator > svg,
-.mediaSourceIndicator > svg,
-.playedIndicator > svg {
+html .countIndicator > svg,
+html .fullSyncIndicator > svg,
+html .mediaSourceIndicator > svg,
+html .playedIndicator > svg {
   fill: var(--gh-fg-on-emphasis);
 }
 
-.countIndicator {
+html .countIndicator {
   background: var(--gh-canvas-subtle);
   color: var(--gh-fg);
   border: 1px solid var(--gh-border);
@@ -938,9 +954,9 @@ html body .MuiChip-label {
   padding: 0 7px;
 }
 
-.mediaInfoText,
-.mediaInfoOfficialRating,
-.mediaInfoCriticRating {
+html .mediaInfoText,
+html .mediaInfoOfficialRating,
+html .mediaInfoCriticRating {
   background: transparent;
   color: var(--gh-fg-muted);
   border: 1px solid var(--gh-border);
@@ -949,15 +965,15 @@ html body .MuiChip-label {
 }
 
 /* progress bars */
-.itemProgressBar {
+html .itemProgressBar {
   background: var(--gh-neutral-muted);
 }
 
-.itemProgressBarForeground {
+html .itemProgressBarForeground {
   background-color: var(--gh-accent);
 }
 
-.itemProgressBarForeground-recording {
+html .itemProgressBarForeground-recording {
   background-color: var(--gh-danger-fg);
 }
 
@@ -971,17 +987,17 @@ html body .MuiLinearProgress-barColorSuccess {
 }
 
 /* scroller arrows */
-.emby-scrollbuttons-button {
+html .emby-scrollbuttons-button {
   color: var(--gh-fg-muted);
 }
 
 /* alpha picker */
-.alphaPickerButton {
+html .alphaPickerButton {
   color: var(--gh-fg-muted);
   border-radius: var(--gh-radius);
 }
 
-.alphaPickerButton-selected {
+html .alphaPickerButton-selected {
   color: var(--gh-fg-on-emphasis);
   background-color: var(--gh-accent) !important;
 }
@@ -990,33 +1006,37 @@ html body .MuiLinearProgress-barColorSuccess {
 /* 10. Item details                                                          */
 /* ------------------------------------------------------------------------ */
 
-.detailRibbon {
+html .detailRibbon {
   background: rgb(var(--gh-canvas-channel) / 0.8);
-  border-top: 1px solid var(--gh-border-muted);
-  border-bottom: 1px solid var(--gh-border-muted);
+  /* inset lines instead of borders: borders change the height and push the ribbon past the floated poster */
+  box-shadow: inset 0 1px 0 var(--gh-border-muted), inset 0 -1px 0 var(--gh-border-muted);
 }
 
-.itemName,
-.itemName.infoText {
+html .itemName,
+html .itemName.infoText {
   color: var(--gh-fg);
   font-weight: 600;
 }
 
-.parentName,
-.itemMiscInfo,
-.itemMiscInfo .mediaInfoItem {
+html .nameContainer .parentName,
+html .nameContainer .subtitle {
+  color: var(--gh-fg);
+}
+
+html .itemMiscInfo,
+html .itemMiscInfo .mediaInfoItem {
   color: var(--gh-fg-muted);
 }
 
-.starIcon {
+html .starIcon {
   color: var(--gh-attention-fg);
 }
 
-.mainDetailButtons {
+html .mainDetailButtons {
   gap: 8px;
 }
 
-.detailButton {
+html .detailButton {
   background: var(--gh-btn-bg);
   color: var(--gh-fg);
   border: 1px solid var(--gh-btn-border);
@@ -1024,81 +1044,81 @@ html body .MuiLinearProgress-barColorSuccess {
   padding: 0.45em !important;
 }
 
-.detailButton:hover {
+html .detailButton:hover {
   background: var(--gh-btn-hover-bg);
   border-color: var(--gh-btn-hover-border);
   color: var(--gh-fg);
 }
 
-.detailButton-icon {
+html .detailButton-icon {
   font-size: 1.3em !important;
 }
 
-.mainDetailButtons .btnPlay {
+html .mainDetailButtons .btnPlay {
   background: var(--gh-btn-primary-bg);
   color: var(--gh-btn-primary-fg);
   border-color: rgb(var(--gh-fg-channel) / 0.1);
 }
 
-.mainDetailButtons .btnPlay:hover {
+html .mainDetailButtons .btnPlay:hover {
   background: var(--gh-btn-primary-hover-bg);
   color: var(--gh-btn-primary-fg);
 }
 
-.emby-button.detailFloatingButton {
+html .emby-button.detailFloatingButton {
   background-color: var(--gh-btn-primary-bg);
   color: var(--gh-btn-primary-fg);
 }
 
-.itemOverview,
-.overview-text {
+html .itemOverview,
+html .overview-text {
   color: var(--gh-fg);
 }
 
-.itemDetailsGroup .label,
-.detailsGroupItem .label,
-.itemDetailsGroup .MuiTypography-root.label,
-.mediaInfoLabel {
+html .itemDetailsGroup .label,
+html .detailsGroupItem .label,
+html .itemDetailsGroup .MuiTypography-root.label,
+html .mediaInfoLabel {
   color: var(--gh-fg-muted) !important;
 }
 
-.itemDetailsGroup .content,
-.detailsGroupItem .content,
-.detailsGroupItem a,
-.itemDetailsGroup a {
+html .itemDetailsGroup .content,
+html .detailsGroupItem .content,
+html .detailsGroupItem a,
+html .itemDetailsGroup a {
   color: var(--gh-fg) !important;
 }
 
-.itemDetailsGroup a:hover,
-.detailsGroupItem a:hover,
-.itemTags a:hover,
-.itemExternalLinks a:hover {
+html .itemDetailsGroup a:hover,
+html .detailsGroupItem a:hover,
+html .itemTags a:hover,
+html .itemExternalLinks a:hover {
   color: var(--gh-accent-fg) !important;
 }
 
-.itemTags a,
-.itemExternalLinks a,
-.itemLinks a {
+html .itemTags a,
+html .itemExternalLinks a,
+html .itemLinks a {
   color: var(--gh-accent-fg) !important;
   font-weight: 500;
 }
 
-.itemTags,
-.itemExternalLinks {
+html .itemTags,
+html .itemExternalLinks {
   color: var(--gh-fg-muted);
 }
 
-.detailImageContainer .card .cardScalable,
-.detailImageContainer .cardImageContainer {
+html .detailImageContainer .card .cardScalable,
+html .detailImageContainer .cardImageContainer {
   border-radius: var(--gh-radius-lg);
 }
 
-.emby-collapsible-button {
+html .emby-collapsible-button {
   border-color: var(--gh-border);
   border-radius: var(--gh-radius);
 }
 
-.collapseContent {
+html .collapseContent {
   background-color: var(--gh-canvas-subtle);
   border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius-lg);
@@ -1108,46 +1128,46 @@ html body .MuiLinearProgress-barColorSuccess {
 /* 11. Lists (episodes, playlists, settings)                                 */
 /* ------------------------------------------------------------------------ */
 
-.listItem {
+html .listItem {
   color: var(--gh-fg);
   border-radius: var(--gh-radius);
 }
 
-.listItem:hover {
+html .listItem:hover {
   background-color: var(--gh-hover);
 }
 
-.listItem:focus {
+html .listItem:focus {
   background-color: var(--gh-hover);
 }
 
-.listItem-border {
+html .listItem-border {
   border-color: var(--gh-border-muted) !important;
 }
 
-.paperList {
+html .paperList {
   border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius-lg);
 }
 
-.listItemBodyText {
+html .listItemBodyText {
   color: var(--gh-fg);
 }
 
-.listItemBodyText.secondary,
-.listItem-overview,
-.listItem-bottomoverview {
+html .listItemBodyText.secondary,
+html .listItem-overview,
+html .listItem-bottomoverview {
   color: var(--gh-fg-muted);
 }
 
-.listItemImage {
+html .listItemImage {
   box-shadow: 0 0 0 var(--gh-card-border-width) var(--gh-border);
 }
 
 /* episode / track lists as a bordered Box with divided rows */
-#childrenContent > .itemsContainer.vertical-list,
-.playlistItems.vertical-list,
-#listChildrenCollapsible .vertical-list {
+html #childrenContent > .itemsContainer.vertical-list,
+html .playlistItems.vertical-list,
+html #listChildrenCollapsible .vertical-list {
   border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius-lg);
   overflow: hidden;
@@ -1155,22 +1175,22 @@ html body .MuiLinearProgress-barColorSuccess {
   margin-right: 3.3% !important;
 }
 
-#childrenContent > .itemsContainer.vertical-list > .listItem,
-.playlistItems.vertical-list > .listItem,
-#listChildrenCollapsible .vertical-list > .listItem {
+html #childrenContent > .itemsContainer.vertical-list > .listItem,
+html .playlistItems.vertical-list > .listItem,
+html #listChildrenCollapsible .vertical-list > .listItem {
   border-radius: 0;
   border-bottom: 1px solid var(--gh-border-muted);
 }
 
-#childrenContent > .itemsContainer.vertical-list > .listItem:last-child,
-.playlistItems.vertical-list > .listItem:last-child,
-#listChildrenCollapsible .vertical-list > .listItem:last-child {
+html #childrenContent > .itemsContainer.vertical-list > .listItem:last-child,
+html .playlistItems.vertical-list > .listItem:last-child,
+html #listChildrenCollapsible .vertical-list > .listItem:last-child {
   border-bottom: 0;
 }
 
-.layout-mobile #childrenContent > .itemsContainer.vertical-list,
-.layout-mobile .playlistItems.vertical-list,
-.layout-mobile #listChildrenCollapsible .vertical-list {
+html .layout-mobile #childrenContent > .itemsContainer.vertical-list,
+html .layout-mobile .playlistItems.vertical-list,
+html .layout-mobile #listChildrenCollapsible .vertical-list {
   margin-right: 0 !important;
 }
 
@@ -1178,34 +1198,34 @@ html body .MuiLinearProgress-barColorSuccess {
 /* 12. Dialogs, action sheets, menus, toasts                                 */
 /* ------------------------------------------------------------------------ */
 
-.dialog,
-.formDialogHeader:not(.formDialogHeader-clear),
-.formDialogFooter:not(.formDialogFooter-clear) {
+html .dialog,
+html .formDialogHeader:not(.formDialogHeader-clear),
+html .formDialogFooter:not(.formDialogFooter-clear) {
   background-color: var(--gh-overlay);
   color: var(--gh-fg);
 }
 
-.dialog:not(.dialog-fullscreen) {
+html .dialog:not(.dialog-fullscreen) {
   border: 1px solid var(--gh-border);
   border-radius: var(--gh-radius-lg) !important;
   box-shadow: var(--gh-shadow-overlay);
 }
 
-.formDialogHeader:not(.formDialogHeader-clear) {
+html .formDialogHeader:not(.formDialogHeader-clear) {
   border-bottom: 1px solid var(--gh-border-muted);
 }
 
-.formDialogFooter:not(.formDialogFooter-clear) {
+html .formDialogFooter:not(.formDialogFooter-clear) {
   border-top: 1px solid var(--gh-border-muted);
 }
 
-.dialogBackdropOpened {
+html .dialogBackdropOpened {
   background-color: rgb(1 4 9 / 0.6);
   opacity: 1 !important;
 }
 
 /* "more" menu: Primer ActionMenu */
-.actionSheet {
+html .actionSheet {
   background-color: var(--gh-overlay) !important;
   color: var(--gh-fg);
   border: 1px solid var(--gh-border) !important;
@@ -1214,11 +1234,11 @@ html body .MuiLinearProgress-barColorSuccess {
   overflow: hidden;
 }
 
-.actionSheetContent {
+html .actionSheetContent {
   padding: 8px 0;
 }
 
-.actionSheetMenuItem {
+html .actionSheetMenuItem {
   border-radius: var(--gh-radius) !important;
   margin: 0 8px !important;
   width: calc(100% - 16px) !important;
@@ -1227,36 +1247,36 @@ html body .MuiLinearProgress-barColorSuccess {
   min-height: 0 !important;
 }
 
-.actionSheetMenuItem:hover,
-.actionSheetMenuItem:focus {
+html .actionSheetMenuItem:hover,
+html .actionSheetMenuItem:focus {
   background-color: var(--gh-hover) !important;
 }
 
-.actionSheetItemText {
+html .actionSheetItemText {
   color: var(--gh-fg);
   font-size: 0.875rem;
 }
 
-.actionsheetMenuItemIcon {
+html .actionsheetMenuItemIcon {
   color: var(--gh-fg-muted);
   font-size: 1.15em !important;
 }
 
-.actionSheetMenuItem[data-id="delete"] .actionSheetItemText,
-.actionSheetMenuItem[data-id="delete"] .actionsheetMenuItemIcon {
+html .actionSheetMenuItem[data-id="delete"] .actionSheetItemText,
+html .actionSheetMenuItem[data-id="delete"] .actionsheetMenuItemIcon {
   color: var(--gh-danger-fg);
 }
 
-.actionSheetMenuItem[data-id="delete"]:hover {
+html .actionSheetMenuItem[data-id="delete"]:hover {
   background-color: rgb(248 81 73 / 0.1) !important;
 }
 
-.actionsheetDivider {
+html .actionsheetDivider {
   background: var(--gh-border-muted);
   margin: 6px 0 !important;
 }
 
-.actionSheetTitle {
+html .actionSheetTitle {
   color: var(--gh-fg);
   font-weight: 600;
 }
@@ -1305,7 +1325,7 @@ html body .MuiTooltip-tooltip {
   border: 1px solid var(--gh-border);
 }
 
-.toast {
+html .toast {
   background: var(--gh-overlay);
   color: var(--gh-fg);
   border: 1px solid var(--gh-border);
@@ -1313,7 +1333,7 @@ html body .MuiTooltip-tooltip {
   box-shadow: var(--gh-shadow-overlay);
 }
 
-.infoBanner {
+html .infoBanner {
   background: rgb(var(--gh-accent-channel) / 0.1);
   color: var(--gh-fg);
   border: 1px solid rgb(var(--gh-accent-channel) / 0.4);
@@ -1321,28 +1341,28 @@ html body .MuiTooltip-tooltip {
 }
 
 /* selection mode */
-.itemSelectionPanel {
+html .itemSelectionPanel {
   border-color: var(--gh-accent);
 }
 
-.selectionCommandsPanel {
+html .selectionCommandsPanel {
   background: var(--gh-accent);
   color: var(--gh-fg-on-emphasis) !important;
 }
 
-.upNextDialog-countdownText,
-.metadataSidebarIcon {
+html .upNextDialog-countdownText,
+html .metadataSidebarIcon {
   color: var(--gh-accent-fg);
 }
 
-.progressring-spiner {
+html .progressring-spiner {
   border-color: var(--gh-accent);
 }
 
 /* bottom player bar */
-.appfooter,
-.playlistSectionButton,
-.nowPlayingBar {
+html .appfooter,
+html .playlistSectionButton,
+html .nowPlayingBar {
   background: var(--gh-canvas-subtle);
   color: var(--gh-fg);
   border-top: 1px solid var(--gh-border);
@@ -1352,64 +1372,64 @@ html body .MuiTooltip-tooltip {
 /* 13. Live TV guide                                                         */
 /* ------------------------------------------------------------------------ */
 
-.channelPrograms,
-.guide-channelHeaderCell,
-.programCell {
+html .channelPrograms,
+html .guide-channelHeaderCell,
+html .programCell {
   border-color: var(--gh-border-muted) !important;
 }
 
-.guide-channelHeaderCell,
-.channelsContainer,
-.guide-headerTimeslots,
-.timeslotHeaders {
+html .guide-channelHeaderCell,
+html .channelsContainer,
+html .guide-headerTimeslots,
+html .timeslotHeaders {
   background-color: var(--gh-canvas);
 }
 
-.timeslotHeader,
-.guide-headerTimeslots {
+html .timeslotHeader,
+html .guide-headerTimeslots {
   color: var(--gh-fg-muted);
 }
 
-.programCell {
+html .programCell {
   color: var(--gh-fg);
 }
 
-.programCell-active {
+html .programCell-active {
   background: var(--gh-canvas-subtle) !important;
 }
 
-.programCell-sports {
+html .programCell-sports {
   background: rgb(47 129 247 / 0.18) !important;
 }
 
-.programCell-movie {
+html .programCell-movie {
   background: rgb(163 113 247 / 0.2) !important;
 }
 
-.programCell-kids {
+html .programCell-kids {
   background: rgb(210 153 34 / 0.2) !important;
 }
 
-.programCell-news {
+html .programCell-news {
   background: rgb(63 185 80 / 0.18) !important;
 }
 
-.guide-programTextIcon {
+html .guide-programTextIcon {
   background: var(--gh-neutral-muted);
   color: var(--gh-fg);
   border-radius: 2em;
 }
 
-.guide-channelHeaderCell:focus,
-.programCell:focus {
+html .guide-channelHeaderCell:focus,
+html .programCell:focus {
   background-color: rgb(var(--gh-accent-channel) / 0.25) !important;
   color: var(--gh-fg) !important;
   outline: 2px solid var(--gh-accent);
   outline-offset: -2px;
 }
 
-.guide-channelNumber,
-.guideChannelNumber {
+html .guide-channelNumber,
+html .guideChannelNumber {
   color: var(--gh-fg-muted);
   font-family: var(--gh-font-mono);
 }
@@ -1418,15 +1438,15 @@ html body .MuiTooltip-tooltip {
 /* 14. Login                                                                 */
 /* ------------------------------------------------------------------------ */
 
-#loginPage h1,
-#loginPage .sectionTitle {
+html #loginPage h1,
+html #loginPage .sectionTitle {
   font-weight: 300;
   font-size: 1.6em;
   letter-spacing: -0.5px;
 }
 
-#loginPage .manualLoginForm,
-#loginPage .readOnlyContent {
+html #loginPage .manualLoginForm,
+html #loginPage .readOnlyContent {
   background: var(--gh-canvas-subtle);
   border: 1px solid var(--gh-border-muted);
   border-radius: var(--gh-radius-lg);
@@ -1434,18 +1454,18 @@ html body .MuiTooltip-tooltip {
   box-sizing: border-box;
 }
 
-#loginPage .readOnlyContent .raised,
-#loginPage .manualLoginForm .raised {
+html #loginPage .readOnlyContent .raised,
+html #loginPage .manualLoginForm .raised {
   margin-left: 0;
   margin-right: 0;
   width: 100%;
 }
 
-#loginPage .loginDisclaimer {
+html #loginPage .loginDisclaimer {
   color: var(--gh-fg-muted);
 }
 
-#loginPage .cardText {
+html #loginPage .cardText {
   font-weight: 600;
 }
 
@@ -1533,6 +1553,10 @@ html body main .MuiAvatar-root {
   border: 1px solid var(--gh-border);
 }
 
+html body main .MuiAvatar-root .MuiSvgIcon-root {
+  color: var(--gh-fg-muted);
+}
+
 html body .MuiListItemText-secondary {
   color: var(--gh-fg-muted);
 }
@@ -1557,27 +1581,27 @@ html body .MuiAlert-root {
 }
 
 /* 10.10 legacy dashboard */
-.dashboardSection .paperList,
-.serverInfo.paperList {
+html .dashboardSection .paperList,
+html .serverInfo.paperList {
   background-color: var(--gh-canvas);
 }
 
-.dashboardSection .sectionTitleTextButton h3 {
+html .dashboardSection .sectionTitleTextButton h3 {
   font-weight: 600;
 }
 
-.activeSession .cardFooter,
-.activeSession .visualCardBox {
+html .activeSession .cardFooter,
+html .activeSession .visualCardBox {
   background-color: var(--gh-canvas-subtle);
 }
 
-.sessionNowPlayingTime,
-.sessionAppSecondaryText,
-.sessionNowPlayingName {
+html .sessionNowPlayingTime,
+html .sessionAppSecondaryText,
+html .sessionNowPlayingName {
   color: var(--gh-fg-muted);
 }
 
-.sessionDeviceName {
+html .sessionDeviceName {
   color: var(--gh-fg);
   font-weight: 600;
 }
@@ -1586,16 +1610,23 @@ html body .MuiAlert-root {
 /* 16. Media players                                                         */
 /* ------------------------------------------------------------------------ */
 
-#bookPlayer,
-#comicsPlayer,
-#pdfPlayer,
-#dialogToc,
-#comicsPlayer .swiper-pagination {
+html #bookPlayer,
+html #comicsPlayer,
+html #pdfPlayer,
+html #dialogToc,
+html #comicsPlayer .swiper-pagination {
   background-color: var(--gh-canvas);
   color: var(--gh-fg);
 }
 
-.iconOsd,
-.upNextContainer {
+html .iconOsd,
+html .upNextContainer {
   border-radius: var(--gh-radius-lg);
+}
+
+/* 10.10 dashboard activity icons */
+html .dashboardSection .listItemIcon:not(.listItemIcon-transparent) {
+  background-color: var(--gh-canvas-subtle) !important;
+  color: var(--gh-fg-muted);
+  border: 1px solid var(--gh-border);
 }
