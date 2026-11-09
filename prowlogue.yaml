@@ -1,0 +1,138 @@
+# yaml-language-server: $schema=../schema.json
+owners:
+  - prowlogue # THIS IS WRONGGGGGGGG
+name: Prowlogue
+author: guama.dev
+author_url: https://github.com/prowlogue
+repo: https://github.com/prowlogue/prowlogue-theme
+website: https://prowlogue.app
+description: A dark theme modeled on the Prowlogue Apple TV client, with a white accent, rounded posters that lift and glow on hover, home rows on a frosted glass panel and full-screen artwork behind detail pages.
+versions:
+  - "12"
+note: Made for Jellyfin 12 with the default Auto display mode and Dark theme. Keep the import as the first line of your Custom CSS. The optional potato mode script needs the JavaScript Injector plugin.
+recommends:
+  backdrops: true
+screenshots:
+  - url: https://raw.githubusercontent.com/prowlogue/prowlogue-theme/main/.github/readme/home.webp
+    title: Home
+    description: A full-screen backdrop above a frosted panel of poster rows.
+  - url: https://raw.githubusercontent.com/prowlogue/prowlogue-theme/main/.github/readme/home-rows.webp
+    title: Home rows
+    description: Library rows on frosted glass, with a lift and a glow on hover.
+  - url: https://raw.githubusercontent.com/prowlogue/prowlogue-theme/main/.github/readme/movie.webp
+    title: Movies
+    description: Full-screen artwork, the title's logo and the actions in one place.
+  - url: https://raw.githubusercontent.com/prowlogue/prowlogue-theme/main/.github/readme/series.webp
+    title: TV shows
+    description: Episodes and seasons side by side with the poster.
+  - url: https://raw.githubusercontent.com/prowlogue/prowlogue-theme/main/.github/readme/player.webp
+    title: Player
+    description: All controls in one floating frosted panel.
+  - url: https://raw.githubusercontent.com/prowlogue/prowlogue-theme/main/.github/readme/menu.webp
+    title: Libraries and drawer
+    description: Poster grids with a frosted side drawer.
+  - url: https://raw.githubusercontent.com/prowlogue/prowlogue-theme/main/.github/readme/dialog.webp
+    title: Dialogs
+    description: Plugin settings and pop-ups on a navy panel.
+    hidden: true
+variants:
+  - id: full
+    name: Prowlogue
+    css: |-
+      @import url("https://theme.prowlogue.app/v1/prowlogue.css");
+  - id: lite
+    name: Prowlogue Lite
+    css: |-
+      @import url("https://theme.prowlogue.app/v1/prowlogue-lite.css");
+groups:
+  - id: color
+    label: Accent
+    description: The theme's accent is plain white. Color only marks state, like favorites and played items.
+  - id: posters
+    label: Posters
+  - id: glass
+    label: Frosted glass
+  - id: details
+    label: Detail pages
+settings:
+  - id: accent
+    label: Accent color
+    description: Hover glows, switches, checkboxes and selected items. Buttons and progress bars stay white.
+    type: color
+    group: color
+    default: "#ffffff"
+    tags:
+      - experimental
+    css: |-
+      :root {
+        --pl-accent: {{ value }};
+        --pl-accent-channel: {{ value | r }} {{ value | g }} {{ value | b }};
+        --pl-accent-dark: {{ value | mix "#000000" 0.3 }};
+        --pl-accent-dark-channel: {{ value | mix "#000000" 0.3 | r }} {{ value | mix "#000000" 0.3 | g }} {{ value | mix "#000000" 0.3 | b }};
+        --pl-accent-text: {{ value | contrast }};
+        --pl-accent-text-channel: {{ value | contrast | r }} {{ value | contrast | g }} {{ value | contrast | b }};
+      }
+  - id: poster-radius
+    label: Poster corners
+    description: In points of a 1920-wide screen, so corners scale with the window.
+    type: number
+    group: posters
+    default: 14
+    min: 0
+    max: 40
+    step: 1
+    css: |-
+      :root {
+        --pl-radius-poster: calc({{ value }} * var(--pl-vpt));
+      }
+  - id: lift
+    label: Hover lift
+    description: How much a poster grows under the pointer.
+    type: number
+    group: posters
+    default: 1.04
+    min: 1
+    max: 1.1
+    step: 0.01
+    var: --pl-lift
+  - id: frost-blur
+    label: Frost blur
+    description: The blur behind the home panel and menus, in points of a 1920-wide screen. The lite version has no blur.
+    type: number
+    group: glass
+    default: 20
+    min: 0
+    max: 40
+    step: 1
+    variants:
+      - full
+    css: |-
+      :root {
+        --pl-frost-blur: calc({{ value }} * var(--pl-vpt));
+      }
+  - id: backdrop-blur
+    label: Backdrop blur
+    description: The blur on the artwork behind a detail page.
+    type: number
+    group: details
+    page: movie
+    default: 4
+    min: 0
+    max: 20
+    step: 1
+    unit: px
+    var: --pl-detail-backdrop-blur
+  - id: backdrop-dim
+    label: Backdrop dim
+    description: How much the artwork behind a detail page is darkened, on desktop.
+    type: number
+    group: details
+    page: movie
+    default: 0.17
+    min: 0
+    max: 0.7
+    step: 0.01
+    css: |-
+      :root {
+        --pl-detail-veil: rgba(0, 0, 0, {{ value }});
+      }
